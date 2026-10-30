@@ -1,0 +1,64 @@
+# Configuration for Betterleaks 1.9.x; detection only, no credential validation.
+# Betterleaks 1.9 replaces the inherited global filter when one is supplied.
+# Retain the v1.9.0 default exclusions below, then add the getter exclusion.
+# Source: https://github.com/betterleaks/betterleaks/blob/v1.9.0/config/betterleaks.toml
+# Suppress scanner findings used as survey identifiers or public display assets
+# in the current scan fragment. These are textual patterns, not JS/CSS parsing.
+# Quote regex metacharacters before inserting the value.
+# The CLI's separate credential-field and URL rules are not affected.
+filter = '''
+let literal = replace(finding["secret"], `\E`, `\E\\E\Q`);
+(matchesAny(finding["secret"], [
+  `(?i)^true|false|null$`,
+  `^(?i:a+|b+|c+|d+|e+|f+|g+|h+|i+|j+|k+|l+|m+|n+|o+|p+|q+|r+|s+|t+|u+|v+|w+|x+|y+|z+|\*+|\.+)$`,
+  `^\$(?:\d+|{\d+})$`,
+  `^\$(?:[A-Z_]+|[a-z_]+)$`,
+  `^\${(?:[A-Z_]+|[a-z_]+)}$`,
+  `^\{\{[ \t]*[\w ().|]+[ \t]*}}$`,
+  `^\$\{\{[ \t]*(?:(?:env|github|secrets|vars)(?:\.[A-Za-z]\w+)+[\w "'&./=|]*)[ \t]*}}$`,
+  `^%(?:[A-Z_]+|[a-z_]+)%$`,
+  `^%[+\-# 0]?[bcdeEfFgGoOpqstTUvxX]$`,
+  `^\{\d{0,2}}$`,
+  `^@(?:[A-Z_]+|[a-z_]+)@$`,
+  `^/Users/(?i)[a-z0-9]+/[\w .-/]+$`,
+  `^/(?:bin|etc|home|opt|tmp|usr|var)/[\w ./-]+$`
+]) || containsAny(finding["secret"], [
+  "abcdefghijklmnopqrstuvwxyz",
+  "014df517-39d1-4453-b7b3-9930c563627c"
+]))
+|| filter.matchesAny(finding["fragment_raw"], [
+  // Survey getters: a complete literal argument; chained methods do not matter.
+  `(?:^|[^\w$.])(?:f|a|GetRespondentValue)\s*\(\s*(?:'\Q` + literal + `\E'|"\Q` + literal + `\E")\s*\)`,
+  // These helpers take the question identifier as their first argument.
+  `(?:^|[^\w$.])(?:GridFilter|setQuestionValue)\s*\(\s*(?:'\Q` + literal + `\E'|"\Q` + literal + `\E")\s*,`,
+  // DOM IDs and simple ID/class selectors.
+  `\bdocument\s*\.\s*(?:getElementById|querySelector)\s*\(\s*(?:'[#.]?\Q` + literal + `\E'|"[#.]?\Q` + literal + `\E")\s*\)`,
+  `#\Q` + literal + `\E\s*\{`,
+  // The survey job identifier is metadata, not a credential.
+  `\bsrc_job_id\s*=\s*(?:'\Q` + literal + `\E'|"\Q` + literal + `\E")`,
+  // Image sources and asLink arguments are treated as public display assets.
+  `(?i)<img\b[^<>]*?\bsrc\s*=\s*(?:'[^'\r\n]*\Q` + literal + `\E[^'\r\n]*'|"[^"\r\n]*\Q` + literal + `\E[^"\r\n]*")`,
+  `(?:^|[^\w$.])asLink\s*\(\s*(?:'[^'\r\n]*\Q` + literal + `\E[^'\r\n]*'|"[^"\r\n]*\Q` + literal + `\E[^"\r\n]*")\s*,`,
+  `(?:^|[^\w$.])asLink\s*\(\s*(?:'[^'\r\n]*'|"[^"\r\n]*")\s*,\s*(?:'[^'\r\n]*\Q` + literal + `\E[^'\r\n]*'|"[^"\r\n]*\Q` + literal + `\E[^"\r\n]*")\s*\)`
+])
+'''
+
+[extend]
+useDefault = true
+
+# Broad candidate matching, filtered by Betterleaks' own rarity/word heuristics.
+# Random-looking identifiers may qualify too; no JavaScript/UI parsing is used.
+[[rules]]
+id = "quoted-token"
+description = "Random-looking quoted token"
+regex = '''["']([A-Za-z0-9_./+=-]{12,150})["']'''
+secretGroup = 1
+filter = '''filter.entropy(finding["secret"]) <= 3.0 || filter.failsTokenEfficiency(finding["secret"])'''
+
+# Strong credential context also covers readable or low-entropy passwords.
+# Restrict this to a direct literal return in a simple function body.
+[[rules]]
+id = "credential-getter"
+description = "Literal returned by a credential-named function"
+regex = '''(?i)\bfunction[ \t]+(?:[a-z_$][\w$]*)?(?:private|secret|password)[\w$]*[ \t]*\([^(){}]*\)\s*\{\s*return\s+["']([^"'\r\n]{1,150})["']\s*;?\s*\}'''
+secretGroup = 1

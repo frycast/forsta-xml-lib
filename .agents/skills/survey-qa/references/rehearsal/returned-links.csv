@@ -1,0 +1,6 @@
+Id,tier,locale,url
+0003,basic,en,http://127.0.0.1:4173/start?Id=0003&tier=basic&locale=en&cohort=rehearsal&count=5
+0001,pro,en,http://127.0.0.1:4173/start?Id=0001&tier=pro&locale=en&cohort=rehearsal&count=5
+0005,pro,en,http://127.0.0.1:4173/start?Id=0005&tier=pro&locale=en&cohort=rehearsal&count=5
+0004,pro,fr,http://127.0.0.1:4173/start?Id=0004&tier=pro&locale=fr&cohort=rehearsal&count=5
+0002,basic,fr,http://127.0.0.1:4173/start?Id=0002&tier=basic&locale=fr&cohort=rehearsal&count=5

@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "skills": {
+    "claude-bedrock-profile": {
+      "source": "socialresearchcentre/ds-skills",
+      "sourceType": "github",
+      "skillPath": "skills/claude-bedrock-profile/SKILL.md",
+      "computedHash": "7989d82455c76c33647c160f4d87b4b0e52a434cd348b56334b9c12deb4da198"
+    },
+    "matt-pocock-skill-suggestions": {
+      "source": "socialresearchcentre/ds-skills",
+      "sourceType": "github",
+      "skillPath": "skills/matt-pocock-skill-suggestions/SKILL.md",
+      "computedHash": "d63703d19f5688ab7f48e59f23a4538c1648001fce63ffc84957879c53110ab5"
+    },
+    "poteto-skill-suggestions": {
+      "source": "socialresearchcentre/ds-skills",
+      "sourceType": "github",
+      "skillPath": "skills/poteto-skill-suggestions/SKILL.md",
+      "computedHash": "f61c32b23331c7b96373b8ff43be7ad821fd074c244c3871637b0bc144cd7a69"
+    },
+    "r-unit-testing": {
+      "source": "socialresearchcentre/ds-skills",
+      "sourceType": "github",
+      "skillPath": "skills/r-unit-testing/SKILL.md",
+      "computedHash": "dafb68c30fac5396af1d80d44e9a25b8fb7d231f88c0b9d59ef8a6b9e3166dfa"
+    },
+    "redact-secrets": {
+      "source": "socialresearchcentre/ds-skills",
+      "sourceType": "github",
+      "skillPath": "skills/redact-secrets/SKILL.md",
+      "computedHash": "350a56ef11acf9a1264b6a8eb8ea53b180bd99eb0f1e318482dd7ae1da2cb231"
+    },
+    "survey-qa": {
+      "source": "socialresearchcentre/ds-skills",
+      "sourceType": "github",
+      "skillPath": "skills/survey-qa/SKILL.md",
+      "computedHash": "81c0346f9be5b9f5e7a28b585cac4f176f935b0a1c9b8e151312ca1da8de9ba4"
+    }
+  }
+}
