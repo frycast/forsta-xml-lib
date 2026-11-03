@@ -1,0 +1,37 @@
+name: Offline Forsta regression
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test toolkit and mutation detection
+        run: node --test regression/test/*.test.mjs
+      - name: Test real survey exports
+        run: node regression/cli.mjs test --json regression-output/results.json --junit regression-output/results.xml
+      - name: Inventory all exports
+        if: always()
+        run: node regression/cli.mjs inventory --json regression-output/inventory.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: forsta-regression-reports
+          path: regression-output/
+          retention-days: 14
