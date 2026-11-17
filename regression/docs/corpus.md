@@ -67,9 +67,9 @@ unexecuted, as the limits below make explicit.
 | `structure/loop-members` | Loop mask cases plus original member/body/text structure | No loop traversal or caret evaluation. |
 
 Passing scenarios reach 31 distinct server blocks across these eight exports:
-3 in `p102837425171`, 1 in `p126373808691`, 5 in `p177291954851`, 1 in
-`p197227522938`, 1 in `p280853323149`, 5 in `p312541195228`, 1 in
-`p514002831313`, and 14 in `p624569876868`. A helper counts once when loaded;
+3 in `3470CL.xml`, 1 in `3511L.xml`, 5 in `3519L.xml`, 1 in
+`3374-p197227522938.xml`, 1 in `shell-1.2/3593AL.xml`, 5 in `9145O2L.xml`, 1 in
+`3530BL.xml`, and 14 in `3522RL.xml`. A helper counts once when loaded;
 this is **not** coverage of all its functions. The other 72 exports have inventory
 inspection only. No export has a complete interview test.
 

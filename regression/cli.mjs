@@ -96,7 +96,7 @@ try {
       output({ ...report, command }, `${report.file}: ${report.nodes.length} structures, ${report.blocks.length} blocks\n${report.limitations.join('\n')}\nUnsupported: ${json(report.unsupported)}\n` + (selectors.length ? formatSources(report) : report.nodes.map(n => `${n.entity} ${n.tag} ${n.name}`).join('\n')));
     }
   } else if (command === 'inventory') {
-    const files = readdirSync(resolve(root, 'surveys')).filter(f => f.endsWith('.xml')).sort();
+    const files = readdirSync(resolve(root, 'surveys'), { recursive: true }).filter(f => f.endsWith('.xml')).sort();
     // Process one export at a time; rich structures need not fit in one IPC buffer.
     const surveys = files.map(f => loadSurvey(`surveys/${f}`));
     const duplicate = new Map();
