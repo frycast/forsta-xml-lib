@@ -8,6 +8,21 @@ The runner reads the **current XML files in `surveys/`**. It does not maintain
 copies of the business logic or change the exports. This is a regression toolkit
 for selected behaviours, not a complete Forsta interview engine.
 
+## Development corpus and agent CLI
+
+Start with the [agent workflow](docs/agent-workflow.md) to discover examples, inspect
+original code, export JSON fixtures and test XML files outside this repository.
+The [v1 catalogue](docs/corpus.md) records supported behaviours and uncertainties.
+The default test command now runs 322 scenarios across eight exports and verifies
+source freshness. Existing PR #2 commands remain available.
+
+```sh
+node regression/cli.mjs examples mask
+node regression/cli.mjs show mask/device-options --json -
+node regression/cli.mjs test --example mask/device-options
+node regression/examples/change-and-test.mjs
+```
+
 ## Run it
 
 Requirements: Node.js 24 and Python 3.10 or later. There are no npm or pip
@@ -20,6 +35,9 @@ node regression/cli.mjs test --case sample-only/scode
 node regression/cli.mjs inventory --json regression-output/inventory.json
 node regression/cli.mjs extract surveys/3522RL.xml --json regression-output/lulu-extracted.json
 ```
+
+Use `--json -` for JSON-only stdout. Exit codes are 0 (success), 1 (test
+failure/empty selection), 2 (invalid input/tool error), and 4 (stale corpus).
 
 On Windows, if the Python command is `python`, first run
 `$env:PYTHON = "python"` in PowerShell. On other systems, `PYTHON` can also specify
@@ -142,7 +160,8 @@ A route step starts **at the selected subtree**; it does not infer or check its
 ancestors. It handles `Condition` expressions, ordered `TrueNodes` / `FalseNodes`,
 `ElseEnabled`, `Folder`, `Page`, `Script`, question visits, `Note` and terminal
 `Stop` nodes. If both an expression and a stored structured predicate exist, the
-explicit expression is used. Structured-only predicates fail. `Loop`, `CallBlock`,
+explicit expression is used. Structured-only predicates fail. Ordered `CallBlock` targets resolve to their
+original `CallableBlock`; recursive calls and non-InOrder targets fail. `Loop`,
 emails, telephone and other unsupported nodes fail when entered.
 
 Answers are preseeded. Visiting a question does not render it or run its masks,
@@ -172,6 +191,7 @@ and JUnit reports for 14 days, including on failure. Inventory syntax failures a
 reported separately; they are not silently treated as executed tests or made
 fatal for unrelated scenarios. Any selected incompatible block fails its case.
 
-See [coverage and observed behaviour](docs/coverage.md) for the initial results,
+See [the v1 corpus](docs/corpus.md) for current evidence and
+[coverage and observed behaviour](docs/coverage.md) for the initial PR #2 results,
 representative selection, and the distinction between regression guarantees and
 current behaviour that may need a future business decision.

@@ -24,6 +24,10 @@ jobs:
           python-version: '3.12'
       - name: Test toolkit and mutation detection
         run: node --test regression/test/*.test.mjs
+      - name: Check pinned corpus sources
+        run: node regression/cli.mjs corpus check
+      - name: Exercise agent workflow with temporary XML
+        run: node regression/examples/change-and-test.mjs
       - name: Test real survey exports
         run: node regression/cli.mjs test --json regression-output/results.json --junit regression-output/results.xml
       - name: Inventory all exports

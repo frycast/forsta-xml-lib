@@ -31,6 +31,23 @@
     state.effects.push({ api, args: clone(args) });
   };
 
+  // Only the set operations used by the corpus. Code order is insertion order;
+  // this does not model Forsta answer-list ordering or randomisation.
+  const codes = input => {
+    const raw = input instanceof CodeSet ? input.members : value(input);
+    const list = raw === null ? [] : Array.isArray(raw) ? raw : [raw];
+    if (list.some(x => !['string', 'number'].includes(typeof x) ||
+        (typeof x === 'number' && !Number.isFinite(x)))) fail('set needs string/number codes');
+    return [...new Set(list.map(String))];
+  };
+  class CodeSet {
+    constructor(input) { this.members = codes(input); }
+    add(code) { this.members = [...new Set([...this.members, ...codes(code)])]; }
+    remove(code) { this.members = this.diff(new CodeSet(code)).members; }
+    union(other) { return new CodeSet([...this.members, ...codes(other)]); }
+    diff(other) { const excluded = codes(other); return new CodeSet(this.members.filter(x => !excluded.includes(x))); }
+  }
+
   class Field {
     constructor(id, indices = []) {
       this.id = String(value(id));
@@ -76,11 +93,19 @@
       return read((fixture.labels || {})[this.id] || {}, this.indices.at(-1), `label for ${this.id}`);
     }
     valueLabel() { return read((fixture.labels || {})[this.id] || {}, String(this.get()), `label for ${this.id}`); }
+    union(other) { return new CodeSet(this.get()).union(other); }
+    diff(other) { return new CodeSet(this.get()).diff(other); }
   }
 
   const environment = key => read(state.environment, key, 'environment');
   Object.assign(globalThis, {
     f: (id, ...indices) => new Field(id, indices),
+    set: (...items) => new CodeSet(items),
+    a: id => {
+      const domain = read(fixture.domains || {}, String(value(id)), 'domain');
+      if (!Array.isArray(domain)) fail('answer domain must be an array');
+      return new CodeSet(domain);
+    },
     CurrentForm: () => environment('currentForm'),
     CurrentLang: () => environment('language'),
     GetSurveyChannel: () => environment('channel'),
@@ -164,6 +189,11 @@
     NativeDate.prototype[method] = () => fail(`Date.${method} is not modelled`);
   }
   globalThis.__snapshot = () => JSON.stringify(state);
+  globalThis.__maskSnapshot = () => {
+    if (!(globalThis.__maskResult instanceof CodeSet) && !(globalThis.__maskResult instanceof Field))
+      fail('mask must return a set or field');
+    return JSON.stringify(codes(globalThis.__maskResult));
+  };
   globalThis.__setCurrentForm = id => { state.environment.currentForm = id; };
 })(JSON.parse(__fixtureJSON));
 delete globalThis.__fixtureJSON;

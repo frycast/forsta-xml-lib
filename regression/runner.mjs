@@ -67,8 +67,9 @@ export function runScenario(scenario, survey = loadSurvey(scenario.survey)) {
     try { return JSON.parse(worker.stdout); } catch { /* malformed worker output */ }
   }
   return { id: scenario.id, survey: survey.file, surveyHash: survey.sha256, status: 'failed',
-    blocks: [], decisions: [], visited: [], omittedHooks: [], halt: null,
-    failure: { step: 0, source: null, scriptLocation: null,
+    blocks: [], decisions: [], masks: [], visited: [], omittedHooks: [], halt: null,
+    failure: { step: 0, source: null, scriptLocation: null, code: 'WORKER_ERROR',
+      expected: scenario.expect || null, actual: null, selector: null,
       message: `Isolated worker failed: ${worker.error?.message || worker.signal || `exit ${worker.status}`}` } };
 }
 
@@ -76,7 +77,7 @@ export function runScenario(scenario, survey = loadSurvey(scenario.survey)) {
 export function executeScenario(scenario, survey) {
   const result = {
     id: scenario.id, survey: survey.file, surveyHash: survey.sha256, status: 'failed',
-    blocks: [], decisions: [], visited: [], omittedHooks: [], halt: null,
+    blocks: [], decisions: [], masks: [], visited: [], omittedHooks: [], halt: null,
   };
   let context, currentSource, stepIndex = -1;
   const run = (code, filename = 'forsta-mock') => new vm.Script(code, { filename })
@@ -106,6 +107,7 @@ export function executeScenario(scenario, survey) {
       return answer;
     };
     const nodes = new Map(survey.nodes.map(n => [n.key, n]));
+    const activeCalls = new Set();
     const questions = new Set(['Info', 'Open', 'Single', 'Multi', 'Grid', 'Grid3D']);
     const route = node => {
       if (result.halt) return;
@@ -121,8 +123,17 @@ export function executeScenario(scenario, survey) {
         else if (node.attrs.ElseEnabled === 'true') children('FalseNodes');
       } else if (node.tag === 'Script') {
         evaluate(select(directBlocks, { entity: node.entity, kind: 'ScriptCode' }));
-      } else if (['Folder', 'Page'].includes(node.tag)) children('Nodes');
-      else if (node.tag === 'Stop') {
+      } else if (['Folder', 'Page', 'CallableBlock'].includes(node.tag)) {
+        if (node.attrs.Order && node.attrs.Order !== 'InOrder') throw new Error(`Unsupported route order ${node.attrs.Order}`);
+        children('Nodes');
+      } else if (node.tag === 'CallBlock') {
+        assert.ok(node.attrs.BlockToCallEntityId, 'CallBlock needs BlockToCallEntityId');
+        const target = select(survey.nodes, { entity: node.attrs.BlockToCallEntityId }, 'call target');
+        assert.equal(target.tag, 'CallableBlock', 'call target must be a CallableBlock');
+        if (activeCalls.has(target.key)) throw new Error('Unsupported recursive CallBlock');
+        activeCalls.add(target.key);
+        try { route(target); } finally { activeCalls.delete(target.key); }
+      } else if (node.tag === 'Stop') {
         result.halt = { kind: 'stop', entity: node.entity, stopType: node.attrs.StopType, extendedStatus: node.attrs.ITS };
       } else if (questions.has(node.tag)) {
         // This is a routing slice, not an interview engine. Answers are preseeded.
@@ -134,16 +145,23 @@ export function executeScenario(scenario, survey) {
       if (result.halt) break;
       stepIndex = index;
       currentSource = null;
-      checkedKeys(step, ['script', 'expression', 'route', 'equals', 'currentForm'], 'step');
-      const operations = ['script', 'expression', 'route'].filter(key => Object.hasOwn(step, key));
+      checkedKeys(step, ['script', 'expression', 'mask', 'route', 'equals', 'currentForm'], 'step');
+      const operations = ['script', 'expression', 'mask', 'route'].filter(key => Object.hasOwn(step, key));
       assert.equal(operations.length, 1, 'step must select exactly one operation');
-      assert.ok(!Object.hasOwn(step, 'equals') || step.expression, 'equals is only valid on an expression step');
+      assert.ok(!Object.hasOwn(step, 'equals') || step.expression || step.mask, 'equals is only valid on an expression or mask step');
       if (Object.hasOwn(step, 'currentForm')) run(`__setCurrentForm(${JSON.stringify(step.currentForm)})`);
       try {
         if (step.route) route(select(survey.nodes, step.route, 'route node'));
         else {
-          const block = select(survey.blocks, step.script || step.expression);
-          if (step.expression) {
+          const block = select(survey.blocks, step.script || step.expression || step.mask);
+          if (step.mask) {
+            assert.ok(['PrecodeMask', 'ScalePrecodeMask'].includes(block.kind), 'mask step must select a code-set mask');
+            assert.ok(Array.isArray(step.equals) && step.equals.every(x => typeof x === 'string'), 'mask step needs equals: string[]');
+            context.__maskResult = evaluate(block);
+            const actual = JSON.parse(run('__maskSnapshot()'));
+            result.masks.push({ key: block.key, codes: actual });
+            assert.deepEqual(actual, step.equals, 'mask codes (insertion order)');
+          } else if (step.expression) {
             assert.equal(block.mode, 'expression', 'expression step must select an expression');
             assert.ok(Object.hasOwn(step, 'equals'), 'expression step needs equals');
             assert.equal(decide(block), step.equals, 'condition result');
@@ -177,10 +195,20 @@ export function executeScenario(scenario, survey) {
   } catch (error) {
     result.failure = { step: stepIndex + 1, source: currentSource || null,
       scriptLocation: error.stack?.split('\n').find(line => line.includes('.xml#'))?.trim() || null,
-      message: error.message };
+      code: error.code === 'ERR_ASSERTION' ? 'ASSERTION_FAILED'
+        : /undeclared/.test(error.message) ? 'MISSING_FIXTURE'
+        : error.name === 'SyntaxError' || /Unsupported|not a function|not defined|not modelled|Code generation/.test(error.message) ? 'UNSUPPORTED'
+        : /Mock contract/.test(error.message) ? 'MOCK_CONTRACT' : 'EXECUTION_ERROR',
+      message: error.message,
+      ...(Object.hasOwn(error, 'expected') ? { expected: error.expected ?? null, actual: error.actual ?? null } : {}) };
     // Serialise inside the VM, under the same timeout; never call a VM function on the host.
     if (context) {
       try { result.actual = JSON.parse(run('__snapshot()')); } catch { /* setup/timeout failure */ }
+    }
+    result.failure.selector = scenario.steps?.[stepIndex] || null;
+    if (!Object.hasOwn(result.failure, 'expected')) {
+      result.failure.expected = scenario.expect || null;
+      result.failure.actual = result.actual || null;
     }
   }
   result.blocks = [...new Map(result.blocks.map(b => [b.key, b])).values()];
