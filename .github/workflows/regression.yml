@@ -28,7 +28,16 @@ jobs:
         run: node regression/cli.mjs test --json regression-output/results.json --junit regression-output/results.xml
       - name: Inventory all exports
         if: always()
-        run: node regression/cli.mjs inventory --json regression-output/inventory.json
+        run: |
+          node regression/cli.mjs inventory --json regression-output/inventory.json
+          python - <<'PYTHON'
+          import json
+          from pathlib import Path
+          report = json.loads(Path("regression-output/inventory.json").read_text())
+          expected = {path.as_posix() for path in Path("surveys").rglob("*.xml")}
+          found = {row["file"] for row in report["files"]}
+          assert found == expected, f"Inventory differs from surveys/: {sorted(found ^ expected)}"
+          PYTHON
       - uses: actions/upload-artifact@v4
         if: always()
         with:

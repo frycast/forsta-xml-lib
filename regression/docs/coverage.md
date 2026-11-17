@@ -27,9 +27,9 @@ that similar shell scripts can have different business rules. A single universal
 
 | Export | Why selected | Cases | Server blocks reached / extracted | XML conditions exercised both ways |
 | --- | --- | ---: | ---: | ---: |
-| `p624569876868.xml` — 3522RL LULU Recontact | Rich routing, validation, shell and integration logic | 214 | 12 / 189 | 2 |
-| `p177291954851.xml` — 3537 Annual Stakeholder, sample only | External redirect and completion-code state transitions | 17 | 5 / 147 | 2 |
-| `p312541195228.xml` — 9145O2L Client Omnibus | Incentives based on partial section completion | 43 | 3 / 204 | 0 |
+| `3522RL.xml` — 3522RL LULU Recontact | Rich routing, validation, shell and integration logic | 214 | 12 / 189 | 2 |
+| `3519L.xml` — 3537 Annual Stakeholder, sample only | External redirect and completion-code state transitions | 17 | 5 / 147 | 2 |
+| `9145O2L.xml` — 9145O2L Client Omnibus | Incentives based on partial section completion | 43 | 3 / 204 | 0 |
 
 These counts are **block reachability in passing cases**, not line, function,
 JavaScript branch, path or full-survey coverage. Loading a shared function script

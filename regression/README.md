@@ -18,7 +18,7 @@ npm test
 node regression/cli.mjs test --json regression-output/results.json --junit regression-output/results.xml
 node regression/cli.mjs test --case sample-only/scode
 node regression/cli.mjs inventory --json regression-output/inventory.json
-node regression/cli.mjs extract surveys/p624569876868.xml --json regression-output/lulu-extracted.json
+node regression/cli.mjs extract surveys/3522RL.xml --json regression-output/lulu-extracted.json
 ```
 
 On Windows, if the Python command is `python`, first run
@@ -69,7 +69,7 @@ test code; they must not make network calls or use time/randomness to build case
 ```js
 export default [{
   id: 'lulu/example-autocode-single-answer',
-  survey: 'surveys/p624569876868.xml',
+  survey: 'surveys/3522RL.xml',
   given: { fields: { A10: ['2'], A11: null } },
   steps: [{ route: { entity: '1652543210' } }],
   expect: {

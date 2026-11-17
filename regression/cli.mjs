@@ -25,7 +25,7 @@ try {
     const output = json(loadSurveys([resolve(file)])[0]);
     if (values.json) save(values.json, output); else process.stdout.write(output);
   } else if (command === 'inventory') {
-    const files = readdirSync(resolve(root, 'surveys')).filter(f => f.endsWith('.xml')).sort().map(f => resolve(root, 'surveys', f));
+    const files = readdirSync(resolve(root, 'surveys'), { recursive: true }).filter(f => f.endsWith('.xml')).sort().map(f => resolve(root, 'surveys', f));
     const surveys = loadSurveys(files);
     const counts = blocks => blocks.reduce((result, block) => {
       const status = compileStatus(block);
