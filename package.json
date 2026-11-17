@@ -2,11 +2,15 @@
   "name": "forsta-xml-regression",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=24" },
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "test": "node --test regression/test/*.test.mjs && node regression/cli.mjs test",
     "test:toolkit": "node --test regression/test/*.test.mjs",
     "test:surveys": "node regression/cli.mjs test",
-    "inventory": "node regression/cli.mjs inventory"
+    "inventory": "node regression/cli.mjs inventory",
+    "test:corpus": "node regression/cli.mjs corpus check",
+    "demo": "node regression/examples/change-and-test.mjs"
   }
 }

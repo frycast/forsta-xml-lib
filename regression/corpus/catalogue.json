@@ -1,0 +1,727 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "examples": [
+    {
+      "id": "routing/advice-category",
+      "title": "Calculate wording categories within a routed section",
+      "status": "characterised",
+      "survey": "surveys/p624569876868.xml",
+      "scenarioPrefixes": [
+        "lulu/advice-priority/",
+        "lulu/other-recontact-group-skips-advice"
+      ],
+      "selectors": [
+        {
+          "entity": "1652543279"
+        }
+      ],
+      "tags": [
+        "routing",
+        "sections",
+        "calculation",
+        "piping"
+      ],
+      "questionTypes": [
+        "Single",
+        "Multi",
+        "Hidden"
+      ],
+      "apis": [
+        "f.any",
+        "f.set"
+      ],
+      "use": "Set hidden wording categories from multiple selected advice providers.",
+      "requirements": [
+        "RECONTACT_GROUP, PF15b and both HID_PF21 outputs; enter at the selected condition."
+      ],
+      "limitations": [
+        "Piping/rendering and ancestor eligibility are not executed."
+      ],
+      "observations": [
+        "Priority is the highest matching category in this export, not a general coding rule."
+      ]
+    },
+    {
+      "id": "routing/single-followup",
+      "title": "Ask a follow-up only for multiple answers",
+      "status": "characterised",
+      "survey": "surveys/p624569876868.xml",
+      "scenarioPrefixes": [
+        "lulu/communication-route/"
+      ],
+      "selectors": [
+        {
+          "entity": "1652543210"
+        }
+      ],
+      "tags": [
+        "routing",
+        "autocode",
+        "boundary"
+      ],
+      "questionTypes": [
+        "Single",
+        "Multi"
+      ],
+      "apis": [
+        "f.size",
+        "f.set"
+      ],
+      "use": "Copy the sole selected code, or visit the follow-up question for multiple selections.",
+      "requirements": [
+        "Declare A10 and writable A11, including explicit null."
+      ],
+      "limitations": [
+        "Question requiredness and ancestor conditions require Forsta."
+      ],
+      "observations": [
+        "An empty answer takes the autocode branch but leaves A11 missing."
+      ]
+    },
+    {
+      "id": "validation/exclusive-options",
+      "title": "Reject conflicting multicode answers",
+      "status": "characterised",
+      "survey": "surveys/p624569876868.xml",
+      "scenarioPrefixes": [
+        "lulu/complaint-exclusivity/"
+      ],
+      "selectors": [
+        {
+          "entity": "1652543248"
+        }
+      ],
+      "tags": [
+        "validation",
+        "exclusivity"
+      ],
+      "questionTypes": [
+        "Multi"
+      ],
+      "apis": [
+        "CurrentForm",
+        "RaiseError",
+        "SetQuestionErrorMessage"
+      ],
+      "use": "Check a specific subset conflict across all 128 subsets of seven codes.",
+      "requirements": [
+        "A26 and currentForm=A26."
+      ],
+      "limitations": [
+        "XML Punch=Single and UI exclusivity are not automatically applied."
+      ],
+      "observations": []
+    },
+    {
+      "id": "respondent/session-clock",
+      "title": "Update session fields at a fixed time",
+      "status": "characterised",
+      "survey": "surveys/p624569876868.xml",
+      "scenarioPrefixes": [
+        "lulu/global-validation-fixed-clock-and-loop-cell"
+      ],
+      "selectors": [
+        {
+          "entity": "ProjectInfo",
+          "kind": "GlobalQuestionValidationCode"
+        }
+      ],
+      "tags": [
+        "respondent-state",
+        "loop-cells",
+        "time"
+      ],
+      "questionTypes": [
+        "Hidden",
+        "Open"
+      ],
+      "apis": [
+        "CurrentForm",
+        "f.set",
+        "Date"
+      ],
+      "use": "Check path, page count and indexed session duration writes.",
+      "requirements": [
+        "Explicit currentForm, timestamp, attempt index and declared indexed cells."
+      ],
+      "limitations": [
+        "One explicit global-hook invocation; navigation/retries and real hook order require Forsta."
+      ],
+      "observations": []
+    },
+    {
+      "id": "respondent/queue",
+      "title": "Map extended statuses to sample state",
+      "status": "characterised",
+      "survey": "surveys/p624569876868.xml",
+      "scenarioPrefixes": [
+        "lulu/queue/",
+        "lulu/early-complete-queue-override"
+      ],
+      "selectors": [
+        {
+          "entity": "1652540232"
+        }
+      ],
+      "tags": [
+        "status",
+        "sample",
+        "respondent-state"
+      ],
+      "questionTypes": [
+        "Sample",
+        "Hidden"
+      ],
+      "apis": [
+        "GetExtendedStatus",
+        "GetRespondentValue",
+        "SetRespondentValue",
+        "SetStatus"
+      ],
+      "use": "Verify queue/contact/screener writes at status boundaries.",
+      "requirements": [
+        "Distinct respondent and field stores; extendedStatus; EarlyCompFlg."
+      ],
+      "limitations": [
+        "No CATI scheduler or persistent sample database."
+      ],
+      "observations": []
+    },
+    {
+      "id": "integration/email-category",
+      "title": "Characterise mocked email validation categories",
+      "status": "characterised",
+      "survey": "surveys/p624569876868.xml",
+      "scenarioPrefixes": [
+        "lulu/email/",
+        "lulu/empty-email-does-not-call-service"
+      ],
+      "selectors": [
+        {
+          "entity": "1652540440"
+        },
+        {
+          "entity": "1652541995"
+        }
+      ],
+      "tags": [
+        "integration",
+        "validation",
+        "suspected-defect"
+      ],
+      "questionTypes": [
+        "Open"
+      ],
+      "apis": [
+        "Http.Get",
+        "CurrentLang",
+        "RaiseError"
+      ],
+      "use": "Test exact service requests and category-dependent validation using synthetic responses.",
+      "requirements": [
+        "Original Generic functions defines errormessage; synthetic email; FIFO HTTP response; labels and language."
+      ],
+      "limitations": [
+        "Provider semantics, outages/retries and real credentials are not tested."
+      ],
+      "observations": [
+        "Suspicion: includes(\"accept_all\",\"role_address\",\"disposable\") only tests accept_all in JavaScript. Current acceptance of the other two is not recommended policy."
+      ]
+    },
+    {
+      "id": "incentive/standard",
+      "title": "Standard-shell credit eligibility",
+      "status": "characterised",
+      "survey": "surveys/p624569876868.xml",
+      "scenarioPrefixes": [
+        "lulu/incentive/",
+        "lulu/additional-incentive-disabled"
+      ],
+      "selectors": [
+        {
+          "entity": "1652542168"
+        }
+      ],
+      "tags": [
+        "incentive",
+        "status",
+        "integration"
+      ],
+      "questionTypes": [
+        "Hidden"
+      ],
+      "apis": [
+        "SetPanelistCredit",
+        "GetExtendedStatus"
+      ],
+      "use": "Assert attempted credits and dummy-sample exclusion.",
+      "requirements": [
+        "See fixtures for exact helper-loading steps and record/reference values."
+      ],
+      "limitations": [
+        "An attempted credit does not prove remote payment, idempotency or persistence."
+      ],
+      "observations": [
+        "Standard eligibility differs from the omnibus example."
+      ]
+    },
+    {
+      "id": "incentive/omnibus",
+      "title": "Omnibus credit eligibility by sections",
+      "status": "characterised",
+      "survey": "surveys/p312541195228.xml",
+      "scenarioPrefixes": [
+        "omnibus/incentive/",
+        "omnibus/additional-incentive-disabled"
+      ],
+      "selectors": [
+        {
+          "entity": "1652542168"
+        }
+      ],
+      "tags": [
+        "incentive",
+        "sections",
+        "integration"
+      ],
+      "questionTypes": [
+        "Hidden"
+      ],
+      "apis": [
+        "SetPanelistCredit",
+        "GetExtendedStatus"
+      ],
+      "use": "Check credits when completed-section count affects eligibility.",
+      "requirements": [
+        "Synthetic section count, dummy flag, status and exact helper steps."
+      ],
+      "limitations": [
+        "No concurrent redemption or real service test."
+      ],
+      "observations": [
+        "A positive section count can make an otherwise non-complete status eligible. Confirm intended policy."
+      ]
+    },
+    {
+      "id": "redirect/completion-state",
+      "title": "Protect completed outcomes on return",
+      "status": "characterised",
+      "survey": "surveys/p177291954851.xml",
+      "scenarioPrefixes": [
+        "sample-only/scode/"
+      ],
+      "selectors": [
+        {
+          "entity": "1652542302"
+        },
+        {
+          "entity": "1652542308"
+        },
+        {
+          "entity": "1652542310"
+        }
+      ],
+      "tags": [
+        "redirect",
+        "status",
+        "routing"
+      ],
+      "questionTypes": [
+        "Hidden"
+      ],
+      "apis": [
+        "Request.QueryString.item"
+      ],
+      "use": "Check the full previous/new completion-code table and terminal stops.",
+      "requirements": [
+        "Explicit query scode (null means absent) and configured completion/screen codes."
+      ],
+      "limitations": [
+        "Stop records intent, not a persisted Forsta status."
+      ],
+      "observations": []
+    },
+    {
+      "id": "redirect/sample-link",
+      "title": "Build a redirect using a sample URL",
+      "status": "characterised",
+      "survey": "surveys/p177291954851.xml",
+      "scenarioPrefixes": [
+        "sample-only/redirect-preserves-sid"
+      ],
+      "selectors": [
+        {
+          "entity": "1652542312"
+        },
+        {
+          "entity": "1652542314"
+        }
+      ],
+      "tags": [
+        "redirect",
+        "sample",
+        "integration"
+      ],
+      "questionTypes": [
+        "Sample",
+        "Hidden"
+      ],
+      "apis": [
+        "GetRespondentValue",
+        "Redirect"
+      ],
+      "use": "Test source helper and SID propagation without navigating a browser.",
+      "requirements": [
+        "Original GetBaseURL helper; synthetic ExternalSurveyLink, sid, writable client_url."
+      ],
+      "limitations": [
+        "Existing case uses a URL with a query; URL encoding and unusual input need separate cases."
+      ],
+      "observations": []
+    },
+    {
+      "id": "mask/selected-plus-exclusive",
+      "title": "Union earlier selections with fixed options",
+      "status": "characterised",
+      "survey": "surveys/p102837425171.xml",
+      "scenarioPrefixes": [
+        "corpus/mask-union/"
+      ],
+      "selectors": [
+        {
+          "entity": "1652542451"
+        }
+      ],
+      "tags": [
+        "mask",
+        "options",
+        "set"
+      ],
+      "questionTypes": [
+        "Multi"
+      ],
+      "apis": [
+        "f.union",
+        "set"
+      ],
+      "use": "Carry selected codes forward and always include 97 and 99.",
+      "requirements": [
+        "BC_3x9 values. Referenced answer list 1652542516 remains a Forsta configuration dependency."
+      ],
+      "limitations": [
+        "Mask code order is insertion order in this model; UI order and exclusivity are separate."
+      ],
+      "observations": []
+    },
+    {
+      "id": "mask/device-options",
+      "title": "Use a source helper for a context-dependent option set",
+      "status": "characterised",
+      "survey": "surveys/p102837425171.xml",
+      "scenarioPrefixes": [
+        "corpus/device-mask/"
+      ],
+      "selectors": [
+        {
+          "entity": "1652542286"
+        },
+        {
+          "entity": "1652542287"
+        },
+        {
+          "entity": "1652542288"
+        }
+      ],
+      "tags": [
+        "mask",
+        "loop",
+        "helper",
+        "set"
+      ],
+      "questionTypes": [
+        "Multi",
+        "Loop"
+      ],
+      "apis": [
+        "set",
+        "set.add",
+        "set.remove",
+        "f.any"
+      ],
+      "use": "Test masking2x3 for device codes and smartphone boundary branches.",
+      "requirements": [
+        "Load helper from original ScriptCode; seed BC_2x3_loop explicitly and conditional BC_2x1a/b inputs."
+      ],
+      "limitations": [
+        "Cases simulate one loop context each. Loop traversal and implicit cell scoping are unsupported."
+      ],
+      "observations": []
+    },
+    {
+      "id": "mask/question",
+      "title": "Show a follow-up for a selected code",
+      "status": "characterised",
+      "survey": "surveys/p126373808691.xml",
+      "scenarioPrefixes": [
+        "corpus/question-mask/"
+      ],
+      "selectors": [
+        {
+          "entity": "1652542397"
+        }
+      ],
+      "tags": [
+        "mask",
+        "question"
+      ],
+      "questionTypes": [
+        "Multi"
+      ],
+      "apis": [
+        "f.any"
+      ],
+      "use": "Test a Boolean question mask for selected, unselected and missing answers.",
+      "requirements": [
+        "Explicit Q2 input."
+      ],
+      "limitations": [
+        "Mask is evaluated explicitly; route visits do not apply it automatically."
+      ],
+      "observations": []
+    },
+    {
+      "id": "mask/scale",
+      "title": "Remove a scale option using an explicit domain",
+      "status": "characterised",
+      "survey": "surveys/p514002831313.xml",
+      "scenarioPrefixes": [
+        "corpus/scale-mask/"
+      ],
+      "selectors": [
+        {
+          "entity": "1652542324"
+        }
+      ],
+      "tags": [
+        "mask",
+        "grid",
+        "scale",
+        "set"
+      ],
+      "questionTypes": [
+        "Grid"
+      ],
+      "apis": [
+        "a",
+        "CurrentForm",
+        "set",
+        "set.diff"
+      ],
+      "use": "Check scale-mask exclusion of code 100.",
+      "requirements": [
+        "currentForm=QD6 and explicit QD6_1 domain; XML references do not infer the fixture domain."
+      ],
+      "limitations": [
+        "Row precode mask, UI order and browser hideDKREF_grid are inspectable but not executed by these cases."
+      ],
+      "observations": []
+    },
+    {
+      "id": "mask/grid-columns",
+      "title": "Reveal a DK column after prompting or an existing answer",
+      "status": "characterised",
+      "survey": "surveys/p280853323149.xml",
+      "scenarioPrefixes": [
+        "corpus/column-mask/"
+      ],
+      "selectors": [
+        {
+          "entity": "1652542506"
+        }
+      ],
+      "tags": [
+        "mask",
+        "grid",
+        "dk",
+        "refused"
+      ],
+      "questionTypes": [
+        "Grid3D",
+        "Multi"
+      ],
+      "apis": [
+        "f.toBoolean"
+      ],
+      "use": "Test the Boolean DK column mask independently of rendering.",
+      "requirements": [
+        "DKShowQ17 and Q17DK."
+      ],
+      "limitations": [
+        "Numeric-cell validation, REF column and parent grid rendering remain outside these selected cases."
+      ],
+      "observations": []
+    },
+    {
+      "id": "validation/months-worked",
+      "title": "Validate a numeric range using an earlier answer",
+      "status": "characterised",
+      "survey": "surveys/p197227522938.xml",
+      "scenarioPrefixes": [
+        "corpus/months-worked/"
+      ],
+      "selectors": [
+        {
+          "entity": "1652542194"
+        },
+        {
+          "entity": "1652542191"
+        }
+      ],
+      "tags": [
+        "validation",
+        "numeric",
+        "cross-question",
+        "dk",
+        "refused",
+        "piping"
+      ],
+      "questionTypes": [
+        "Open",
+        "Numeric",
+        "Single"
+      ],
+      "apis": [
+        "CurrentForm",
+        "f.getNoResponseValue",
+        "RaiseError"
+      ],
+      "use": "Check group-dependent lower bounds, upper bounds, malformed input and DK/refusal bypass.",
+      "requirements": [
+        "DB1, DB2, explicit noResponse.DB2, currentForm=DB2."
+      ],
+      "limitations": [
+        "XML numeric input rules and getDB2Text piping are not executed; only validation script."
+      ],
+      "observations": [
+        "Missing DB2 with no no-response flag coerces to zero for comparisons. It passes group 4 but fails group 1. Confirm in Forsta before relying on this."
+      ]
+    },
+    {
+      "id": "validation/grid-row-clear",
+      "title": "Clear invalid grid cells and report the last error",
+      "status": "characterised",
+      "survey": "surveys/p312541195228.xml",
+      "scenarioPrefixes": [
+        "corpus/grid-clear/"
+      ],
+      "selectors": [
+        {
+          "entity": "1652542497"
+        },
+        {
+          "entity": "1652540440"
+        }
+      ],
+      "tags": [
+        "validation",
+        "grid",
+        "state"
+      ],
+      "questionTypes": [
+        "Grid"
+      ],
+      "apis": [
+        "f.item",
+        "f.set",
+        "RaiseError",
+        "CurrentLang"
+      ],
+      "use": "Characterise invalid codes 5/6 in rows a/f and their ordered clearing writes.",
+      "requirements": [
+        "Explicit P_INTENTIONS[a]/[f], source errormessage helper, synthetic labels and language."
+      ],
+      "limitations": [
+        "Browser code also hides these options; that rendering is not tested."
+      ],
+      "observations": [
+        "When both rows are invalid both clear, but the second helper call replaces the first message. This is current behaviour, not a UX recommendation."
+      ]
+    },
+    {
+      "id": "routing/callable-clock",
+      "title": "Follow a call to its original callable block",
+      "status": "characterised",
+      "survey": "surveys/p624569876868.xml",
+      "scenarioPrefixes": [
+        "corpus/callable-clock/"
+      ],
+      "selectors": [
+        {
+          "entity": "1652541229"
+        },
+        {
+          "entity": "1652541227"
+        }
+      ],
+      "tags": [
+        "routing",
+        "callable",
+        "time"
+      ],
+      "questionTypes": [
+        "Hidden",
+        "Open"
+      ],
+      "apis": [
+        "Date",
+        "f.set"
+      ],
+      "use": "Resolve BlockToCallEntityId and execute an ordered timestamp block.",
+      "requirements": [
+        "Declared tStart and fixed now."
+      ],
+      "limitations": [
+        "Randomised callable order, recursion, end-block lifecycle and platform date serialization need Forsta confirmation."
+      ],
+      "observations": []
+    },
+    {
+      "id": "structure/loop-members",
+      "title": "Inspect a masked loop with conditional member wording",
+      "status": "characterised",
+      "survey": "surveys/p624569876868.xml",
+      "scenarioPrefixes": [
+        "corpus/loop-mask/"
+      ],
+      "selectors": [
+        {
+          "entity": "1652543274"
+        }
+      ],
+      "tags": [
+        "loop",
+        "mask",
+        "piping",
+        "conditional-piping"
+      ],
+      "questionTypes": [
+        "Loop",
+        "Multi",
+        "Open"
+      ],
+      "apis": [
+        "f",
+        "f.valueLabel"
+      ],
+      "use": "Inspect members, children and conditional text; test the loop mask code set.",
+      "requirements": [
+        "Explicit Hid_T1_NEW selections. Other loop body inputs are visible in extracted code."
+      ],
+      "limitations": [
+        "Loop traversal, implicit indexed response binding and caret text substitution are unsupported. Never infer that the loop body passed from the mask result."
+      ],
+      "observations": []
+    }
+  ]
+}

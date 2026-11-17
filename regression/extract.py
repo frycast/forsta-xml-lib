@@ -1,6 +1,7 @@
 """Read-only Forsta XML extraction. Python standard library; never resolves entities."""
 import hashlib
 import json
+import re
 import sys
 from collections import Counter
 from html.parser import HTMLParser
@@ -9,8 +10,9 @@ from xml.parsers import expat
 
 
 class Element:
-    def __init__(self, tag, attrs, path, line):
+    def __init__(self, tag, attrs, path, line, start=0):
         self.tag, self.attrs, self.path, self.line = tag, attrs, path, line
+        self.start, self.end = start, start
         self.children, self.parts = [], []
 
     @property
@@ -28,12 +30,36 @@ class Element:
 def parse(data):
     parser = expat.ParserCreate()
     stack, roots = [], []
+    opening_tag = re.compile(br'''<(?:[^>"']|"[^"]*"|'[^']*')*>''')
+    encoding = ('utf-16-le' if data.startswith((b'\xff\xfe', b'<\x00')) else
+                'utf-16-be' if data.startswith((b'\xfe\xff', b'\x00<')) else None)
+    unit = 2 if encoding else 1
+    close = '>'.encode(encoding or 'ascii')
+
+    def opening_end(index):
+        if not encoding:
+            return opening_tag.match(data, index).end()
+        # Expat offsets count bytes, including for UTF-16 exports.
+        quote = None
+        while index < len(data):
+            char = data[index:index+unit].decode(encoding, errors='replace')
+            index += unit
+            if quote:
+                if char == quote:
+                    quote = None
+            elif char in ('"', "'"):
+                quote = char
+            elif char == '>':
+                return index
+        raise ValueError('Unterminated opening tag')
 
     def start(tag, attrs):
         siblings = stack[-1].children if stack else roots
         index = 1 + sum(c.tag == tag for c in siblings)
         path = (stack[-1].path if stack else '') + f'/{tag}[{index}]'
-        node = Element(tag, attrs, path, parser.CurrentLineNumber)
+        node = Element(tag, attrs, path, parser.CurrentLineNumber, parser.CurrentByteIndex)
+        node.end = opening_end(node.start)
+        node.self_closing = data[node.end-2*unit:node.end] == '/>'.encode(encoding or 'ascii')
         siblings.append(node)
         stack.append(node)
 
@@ -44,8 +70,14 @@ def parse(data):
     def reject(*_):
         raise ValueError('DTD and external entities are not supported')
 
+    def end(_):
+        node = stack.pop()
+        index = parser.CurrentByteIndex
+        if not node.self_closing:
+            node.end = data.index(close, index) + unit
+
     parser.StartElementHandler = start
-    parser.EndElementHandler = lambda _: stack.pop()
+    parser.EndElementHandler = end
     parser.CharacterDataHandler = text
     parser.StartDoctypeDeclHandler = reject
     parser.ExternalEntityRefHandler = reject
@@ -90,7 +122,7 @@ CODE = {
 }
 ROUTE_TAGS = {'Script', 'Condition', 'Folder', 'Page', 'Stop', 'Note', 'Info',
               'Open', 'Single', 'Multi', 'Grid', 'Grid3D', 'Loop', 'CallBlock',
-              'Telephone', 'Directive', 'Email', 'FileUpload', 'InlineBlock'}
+              'Telephone', 'Directive', 'Email', 'FileUpload', 'InlineBlock', 'CallableBlock'}
 CONTAINERS = {'Nodes', 'TrueNodes', 'FalseNodes'}
 
 
@@ -100,7 +132,13 @@ def extract(path):
     project = root.child('ProjectInfo')
     if project is None:
         raise ValueError('Missing ProjectInfo')
-    blocks, nodes, ignored = [], [], Counter()
+    blocks, nodes, surfaces, ignored = [], [], [], Counter()
+
+    def structure(node):
+        # Keep local configuration; route children and scripts have their own records.
+        return {'tag': node.tag, 'attrs': node.attrs, 'text': node.text,
+                'children': [structure(c) for c in node.children
+                             if c.tag not in CONTAINERS and c.tag not in CODE]}
 
     def add(node, owner, kind, code, suffix='', environment=None):
         if not code.strip():
@@ -130,14 +168,19 @@ def extract(path):
             ignored['externalBrowserScripts'] += html.external
         if '^' in node.text and node.tag not in CODE:
             ignored['textSurfacesWithCarets'] += 1
+            surfaces.append({'key': node.path, 'entity': owner.attrs.get('EntityId', ''),
+                             'name': owner.value('Name'), 'line': node.line, 'text': node.text,
+                             'sha256': hashlib.sha256(node.text.encode()).hexdigest(),
+                             'support': 'piping-not-evaluated'})
         if node.tag in ROUTE_TAGS:
             predicate = node.child('Predicate')
             structured = predicate is not None and any(c.children for c in predicate.children)
             nodes.append({
                 'key': node.path, 'entity': node.attrs.get('EntityId', ''),
                 'name': node.value('Name'), 'tag': node.tag, 'line': node.line,
-                'attrs': {k: v for k, v in node.attrs.items()
-                          if k in ('ElseEnabled', 'StopType', 'ITS', 'VariableType')},
+                'attrs': node.attrs,
+                'sha256': hashlib.sha256(data[node.start:node.end]).hexdigest(),
+                'structure': structure(node),
                 'structuredPredicate': structured,
                 'children': {c.tag: [n.path for n in c.children]
                              for c in node.children if c.tag in CONTAINERS},
@@ -150,7 +193,8 @@ def extract(path):
         'file': Path(path).as_posix(), 'sha256': hashlib.sha256(data).hexdigest(),
         'projectId': project.attrs.get('ProjectId'), 'name': project.attrs.get('Name'),
         'language': project.attrs.get('ScriptCodeType'),
-        'blocks': blocks, 'nodes': nodes, 'unexecutedSurfaces': dict(ignored),
+        'blocks': blocks, 'nodes': nodes, 'surfaces': surfaces,
+        'unexecutedSurfaces': dict(ignored),
     }
 
 

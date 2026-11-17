@@ -1,0 +1,1392 @@
+{
+  "schemaVersion": 1,
+  "scenarios": [
+    {
+      "id": "corpus/mask-union/empty",
+      "survey": "surveys/p102837425171.xml",
+      "given": {
+        "fields": {
+          "BC_3x9": []
+        }
+      },
+      "steps": [
+        {
+          "mask": {
+            "entity": "1652542451",
+            "kind": "PrecodeMask"
+          },
+          "equals": [
+            "97",
+            "99"
+          ]
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/mask-union/1",
+      "survey": "surveys/p102837425171.xml",
+      "given": {
+        "fields": {
+          "BC_3x9": [
+            "1"
+          ]
+        }
+      },
+      "steps": [
+        {
+          "mask": {
+            "entity": "1652542451",
+            "kind": "PrecodeMask"
+          },
+          "equals": [
+            "1",
+            "97",
+            "99"
+          ]
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/mask-union/1-97",
+      "survey": "surveys/p102837425171.xml",
+      "given": {
+        "fields": {
+          "BC_3x9": [
+            "1",
+            "97"
+          ]
+        }
+      },
+      "steps": [
+        {
+          "mask": {
+            "entity": "1652542451",
+            "kind": "PrecodeMask"
+          },
+          "equals": [
+            "1",
+            "97",
+            "99"
+          ]
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/mask-union/99",
+      "survey": "surveys/p102837425171.xml",
+      "given": {
+        "fields": {
+          "BC_3x9": [
+            "99"
+          ]
+        }
+      },
+      "steps": [
+        {
+          "mask": {
+            "entity": "1652542451",
+            "kind": "PrecodeMask"
+          },
+          "equals": [
+            "99",
+            "97"
+          ]
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/mask-union/1-2",
+      "survey": "surveys/p102837425171.xml",
+      "given": {
+        "fields": {
+          "BC_3x9": [
+            "1",
+            "2"
+          ]
+        }
+      },
+      "steps": [
+        {
+          "mask": {
+            "entity": "1652542451",
+            "kind": "PrecodeMask"
+          },
+          "equals": [
+            "1",
+            "2",
+            "97",
+            "99"
+          ]
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/device-mask/1-na-na",
+      "survey": "surveys/p102837425171.xml",
+      "given": {
+        "fields": {
+          "BC_2x3_loop": "1"
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542286",
+            "kind": "ScriptCode"
+          }
+        },
+        {
+          "mask": {
+            "entity": "1652542287",
+            "kind": "PrecodeMask"
+          },
+          "equals": [
+            "1",
+            "3",
+            "4",
+            "5",
+            "99"
+          ]
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/device-mask/2-na-na",
+      "survey": "surveys/p102837425171.xml",
+      "given": {
+        "fields": {
+          "BC_2x3_loop": "2"
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542286",
+            "kind": "ScriptCode"
+          }
+        },
+        {
+          "mask": {
+            "entity": "1652542287",
+            "kind": "PrecodeMask"
+          },
+          "equals": [
+            "1",
+            "3",
+            "4",
+            "5",
+            "99",
+            "2"
+          ]
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/device-mask/3-na-na",
+      "survey": "surveys/p102837425171.xml",
+      "given": {
+        "fields": {
+          "BC_2x3_loop": "3"
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542286",
+            "kind": "ScriptCode"
+          }
+        },
+        {
+          "mask": {
+            "entity": "1652542287",
+            "kind": "PrecodeMask"
+          },
+          "equals": [
+            "1",
+            "3",
+            "4",
+            "5",
+            "99",
+            "2"
+          ]
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/device-mask/7-2-na",
+      "survey": "surveys/p102837425171.xml",
+      "given": {
+        "fields": {
+          "BC_2x3_loop": "7",
+          "BC_2x1a": "2"
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542286",
+            "kind": "ScriptCode"
+          }
+        },
+        {
+          "mask": {
+            "entity": "1652542287",
+            "kind": "PrecodeMask"
+          },
+          "equals": [
+            "3",
+            "4",
+            "5",
+            "99"
+          ]
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/device-mask/7-1-1",
+      "survey": "surveys/p102837425171.xml",
+      "given": {
+        "fields": {
+          "BC_2x3_loop": "7",
+          "BC_2x1a": "1",
+          "BC_2x1b": "1"
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542286",
+            "kind": "ScriptCode"
+          }
+        },
+        {
+          "mask": {
+            "entity": "1652542287",
+            "kind": "PrecodeMask"
+          },
+          "equals": [
+            "1",
+            "3",
+            "4",
+            "5",
+            "99"
+          ]
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/device-mask/7-1-2",
+      "survey": "surveys/p102837425171.xml",
+      "given": {
+        "fields": {
+          "BC_2x3_loop": "7",
+          "BC_2x1a": "1",
+          "BC_2x1b": "2"
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542286",
+            "kind": "ScriptCode"
+          }
+        },
+        {
+          "mask": {
+            "entity": "1652542287",
+            "kind": "PrecodeMask"
+          },
+          "equals": [
+            "3",
+            "4",
+            "5",
+            "99"
+          ]
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/question-mask/missing",
+      "survey": "surveys/p126373808691.xml",
+      "given": {
+        "fields": {
+          "Q2": null
+        }
+      },
+      "steps": [
+        {
+          "expression": {
+            "entity": "1652542397",
+            "kind": "QuestionMask"
+          },
+          "equals": false
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/question-mask/10",
+      "survey": "surveys/p126373808691.xml",
+      "given": {
+        "fields": {
+          "Q2": [
+            "10"
+          ]
+        }
+      },
+      "steps": [
+        {
+          "expression": {
+            "entity": "1652542397",
+            "kind": "QuestionMask"
+          },
+          "equals": true
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/question-mask/1-10",
+      "survey": "surveys/p126373808691.xml",
+      "given": {
+        "fields": {
+          "Q2": [
+            "1",
+            "10"
+          ]
+        }
+      },
+      "steps": [
+        {
+          "expression": {
+            "entity": "1652542397",
+            "kind": "QuestionMask"
+          },
+          "equals": true
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/question-mask/1",
+      "survey": "surveys/p126373808691.xml",
+      "given": {
+        "fields": {
+          "Q2": [
+            "1"
+          ]
+        }
+      },
+      "steps": [
+        {
+          "expression": {
+            "entity": "1652542397",
+            "kind": "QuestionMask"
+          },
+          "equals": false
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/scale-mask/empty",
+      "survey": "surveys/p514002831313.xml",
+      "given": {
+        "domains": {
+          "QD6_1": []
+        }
+      },
+      "steps": [
+        {
+          "mask": {
+            "entity": "1652542324",
+            "kind": "ScalePrecodeMask"
+          },
+          "currentForm": "QD6",
+          "equals": []
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/scale-mask/1-2-100",
+      "survey": "surveys/p514002831313.xml",
+      "given": {
+        "domains": {
+          "QD6_1": [
+            "1",
+            "2",
+            "100"
+          ]
+        }
+      },
+      "steps": [
+        {
+          "mask": {
+            "entity": "1652542324",
+            "kind": "ScalePrecodeMask"
+          },
+          "currentForm": "QD6",
+          "equals": [
+            "1",
+            "2"
+          ]
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/scale-mask/100",
+      "survey": "surveys/p514002831313.xml",
+      "given": {
+        "domains": {
+          "QD6_1": [
+            "100"
+          ]
+        }
+      },
+      "steps": [
+        {
+          "mask": {
+            "entity": "1652542324",
+            "kind": "ScalePrecodeMask"
+          },
+          "currentForm": "QD6",
+          "equals": []
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/scale-mask/2-1",
+      "survey": "surveys/p514002831313.xml",
+      "given": {
+        "domains": {
+          "QD6_1": [
+            "2",
+            "1"
+          ]
+        }
+      },
+      "steps": [
+        {
+          "mask": {
+            "entity": "1652542324",
+            "kind": "ScalePrecodeMask"
+          },
+          "currentForm": "QD6",
+          "equals": [
+            "2",
+            "1"
+          ]
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/column-mask/hidden-empty",
+      "survey": "surveys/p280853323149.xml",
+      "given": {
+        "fields": {
+          "DKShowQ17": null,
+          "Q17DK": null
+        }
+      },
+      "steps": [
+        {
+          "expression": {
+            "entity": "1652542504",
+            "kind": "ColumnMask"
+          },
+          "equals": false
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/column-mask/shown-empty",
+      "survey": "surveys/p280853323149.xml",
+      "given": {
+        "fields": {
+          "DKShowQ17": "1",
+          "Q17DK": null
+        }
+      },
+      "steps": [
+        {
+          "expression": {
+            "entity": "1652542504",
+            "kind": "ColumnMask"
+          },
+          "equals": true
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/column-mask/hidden-selected",
+      "survey": "surveys/p280853323149.xml",
+      "given": {
+        "fields": {
+          "DKShowQ17": null,
+          "Q17DK": [
+            "a"
+          ]
+        }
+      },
+      "steps": [
+        {
+          "expression": {
+            "entity": "1652542504",
+            "kind": "ColumnMask"
+          },
+          "equals": true
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/column-mask/shown-selected",
+      "survey": "surveys/p280853323149.xml",
+      "given": {
+        "fields": {
+          "DKShowQ17": "1",
+          "Q17DK": [
+            "a"
+          ]
+        }
+      },
+      "steps": [
+        {
+          "expression": {
+            "entity": "1652542504",
+            "kind": "ColumnMask"
+          },
+          "equals": true
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/months-worked/1-0-answered",
+      "survey": "surveys/p197227522938.xml",
+      "given": {
+        "fields": {
+          "DB1": "1",
+          "DB2": 0
+        },
+        "noResponse": {
+          "DB2": null
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542194",
+            "kind": "ValidationCode"
+          },
+          "currentForm": "DB2"
+        }
+      ],
+      "expect": {
+        "validationFailed": true,
+        "messages": [
+          {
+            "language": 3081,
+            "message": "Please enter a response between 1 and 12"
+          }
+        ]
+      }
+    },
+    {
+      "id": "corpus/months-worked/1-1-answered",
+      "survey": "surveys/p197227522938.xml",
+      "given": {
+        "fields": {
+          "DB1": "1",
+          "DB2": 1
+        },
+        "noResponse": {
+          "DB2": null
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542194",
+            "kind": "ValidationCode"
+          },
+          "currentForm": "DB2"
+        }
+      ],
+      "expect": {
+        "validationFailed": false,
+        "messages": []
+      }
+    },
+    {
+      "id": "corpus/months-worked/1-12-answered",
+      "survey": "surveys/p197227522938.xml",
+      "given": {
+        "fields": {
+          "DB1": "1",
+          "DB2": 12
+        },
+        "noResponse": {
+          "DB2": null
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542194",
+            "kind": "ValidationCode"
+          },
+          "currentForm": "DB2"
+        }
+      ],
+      "expect": {
+        "validationFailed": false,
+        "messages": []
+      }
+    },
+    {
+      "id": "corpus/months-worked/1-13-answered",
+      "survey": "surveys/p197227522938.xml",
+      "given": {
+        "fields": {
+          "DB1": "1",
+          "DB2": 13
+        },
+        "noResponse": {
+          "DB2": null
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542194",
+            "kind": "ValidationCode"
+          },
+          "currentForm": "DB2"
+        }
+      ],
+      "expect": {
+        "validationFailed": true,
+        "messages": [
+          {
+            "language": 3081,
+            "message": "Please enter a response between 1 and 12"
+          }
+        ]
+      }
+    },
+    {
+      "id": "corpus/months-worked/4--1-answered",
+      "survey": "surveys/p197227522938.xml",
+      "given": {
+        "fields": {
+          "DB1": "4",
+          "DB2": -1
+        },
+        "noResponse": {
+          "DB2": null
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542194",
+            "kind": "ValidationCode"
+          },
+          "currentForm": "DB2"
+        }
+      ],
+      "expect": {
+        "validationFailed": true,
+        "messages": [
+          {
+            "language": 3081,
+            "message": "Please enter a response between 0 and 12"
+          }
+        ]
+      }
+    },
+    {
+      "id": "corpus/months-worked/4-0-answered",
+      "survey": "surveys/p197227522938.xml",
+      "given": {
+        "fields": {
+          "DB1": "4",
+          "DB2": 0
+        },
+        "noResponse": {
+          "DB2": null
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542194",
+            "kind": "ValidationCode"
+          },
+          "currentForm": "DB2"
+        }
+      ],
+      "expect": {
+        "validationFailed": false,
+        "messages": []
+      }
+    },
+    {
+      "id": "corpus/months-worked/4-12-answered",
+      "survey": "surveys/p197227522938.xml",
+      "given": {
+        "fields": {
+          "DB1": "4",
+          "DB2": 12
+        },
+        "noResponse": {
+          "DB2": null
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542194",
+            "kind": "ValidationCode"
+          },
+          "currentForm": "DB2"
+        }
+      ],
+      "expect": {
+        "validationFailed": false,
+        "messages": []
+      }
+    },
+    {
+      "id": "corpus/months-worked/4-13-answered",
+      "survey": "surveys/p197227522938.xml",
+      "given": {
+        "fields": {
+          "DB1": "4",
+          "DB2": 13
+        },
+        "noResponse": {
+          "DB2": null
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542194",
+            "kind": "ValidationCode"
+          },
+          "currentForm": "DB2"
+        }
+      ],
+      "expect": {
+        "validationFailed": true,
+        "messages": [
+          {
+            "language": 3081,
+            "message": "Please enter a response between 0 and 12"
+          }
+        ]
+      }
+    },
+    {
+      "id": "corpus/months-worked/98-0-answered",
+      "survey": "surveys/p197227522938.xml",
+      "given": {
+        "fields": {
+          "DB1": "98",
+          "DB2": 0
+        },
+        "noResponse": {
+          "DB2": null
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542194",
+            "kind": "ValidationCode"
+          },
+          "currentForm": "DB2"
+        }
+      ],
+      "expect": {
+        "validationFailed": false,
+        "messages": []
+      }
+    },
+    {
+      "id": "corpus/months-worked/99-0-answered",
+      "survey": "surveys/p197227522938.xml",
+      "given": {
+        "fields": {
+          "DB1": "99",
+          "DB2": 0
+        },
+        "noResponse": {
+          "DB2": null
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542194",
+            "kind": "ValidationCode"
+          },
+          "currentForm": "DB2"
+        }
+      ],
+      "expect": {
+        "validationFailed": false,
+        "messages": []
+      }
+    },
+    {
+      "id": "corpus/months-worked/1-missing-dk",
+      "survey": "surveys/p197227522938.xml",
+      "given": {
+        "fields": {
+          "DB1": "1",
+          "DB2": null
+        },
+        "noResponse": {
+          "DB2": "dk"
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542194",
+            "kind": "ValidationCode"
+          },
+          "currentForm": "DB2"
+        }
+      ],
+      "expect": {
+        "validationFailed": false,
+        "messages": []
+      }
+    },
+    {
+      "id": "corpus/months-worked/1-missing-ref",
+      "survey": "surveys/p197227522938.xml",
+      "given": {
+        "fields": {
+          "DB1": "1",
+          "DB2": null
+        },
+        "noResponse": {
+          "DB2": "ref"
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542194",
+            "kind": "ValidationCode"
+          },
+          "currentForm": "DB2"
+        }
+      ],
+      "expect": {
+        "validationFailed": false,
+        "messages": []
+      }
+    },
+    {
+      "id": "corpus/months-worked/1-missing-answered",
+      "survey": "surveys/p197227522938.xml",
+      "given": {
+        "fields": {
+          "DB1": "1",
+          "DB2": null
+        },
+        "noResponse": {
+          "DB2": null
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542194",
+            "kind": "ValidationCode"
+          },
+          "currentForm": "DB2"
+        }
+      ],
+      "expect": {
+        "validationFailed": true,
+        "messages": [
+          {
+            "language": 3081,
+            "message": "Please enter a response between 1 and 12"
+          }
+        ]
+      }
+    },
+    {
+      "id": "corpus/months-worked/4-missing-answered",
+      "survey": "surveys/p197227522938.xml",
+      "given": {
+        "fields": {
+          "DB1": "4",
+          "DB2": null
+        },
+        "noResponse": {
+          "DB2": null
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542194",
+            "kind": "ValidationCode"
+          },
+          "currentForm": "DB2"
+        }
+      ],
+      "expect": {
+        "validationFailed": false,
+        "messages": []
+      }
+    },
+    {
+      "id": "corpus/months-worked/1-abc-answered",
+      "survey": "surveys/p197227522938.xml",
+      "given": {
+        "fields": {
+          "DB1": "1",
+          "DB2": "abc"
+        },
+        "noResponse": {
+          "DB2": null
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652542194",
+            "kind": "ValidationCode"
+          },
+          "currentForm": "DB2"
+        }
+      ],
+      "expect": {
+        "validationFailed": true,
+        "messages": [
+          {
+            "language": 3081,
+            "message": "Please enter a response between 1 and 12"
+          }
+        ]
+      }
+    },
+    {
+      "id": "corpus/grid-clear/1-2",
+      "survey": "surveys/p312541195228.xml",
+      "given": {
+        "fields": {
+          "P_INTENTIONS[a]": "1",
+          "P_INTENTIONS[f]": "2"
+        },
+        "environment": {
+          "language": 3081
+        },
+        "labels": {
+          "standarderrormessage": {
+            "18": "Row a is invalid",
+            "19": "Row f is invalid"
+          }
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652540440",
+            "kind": "ScriptCode"
+          }
+        },
+        {
+          "script": {
+            "entity": "1652542497",
+            "kind": "ValidationCode"
+          }
+        }
+      ],
+      "expect": {
+        "fields": {
+          "P_INTENTIONS[a]": "1",
+          "P_INTENTIONS[f]": "2"
+        },
+        "validationFailed": false,
+        "messages": [],
+        "writes": []
+      }
+    },
+    {
+      "id": "corpus/grid-clear/5-2",
+      "survey": "surveys/p312541195228.xml",
+      "given": {
+        "fields": {
+          "P_INTENTIONS[a]": "5",
+          "P_INTENTIONS[f]": "2"
+        },
+        "environment": {
+          "language": 3081
+        },
+        "labels": {
+          "standarderrormessage": {
+            "18": "Row a is invalid",
+            "19": "Row f is invalid"
+          }
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652540440",
+            "kind": "ScriptCode"
+          }
+        },
+        {
+          "script": {
+            "entity": "1652542497",
+            "kind": "ValidationCode"
+          }
+        }
+      ],
+      "expect": {
+        "fields": {
+          "P_INTENTIONS[a]": null,
+          "P_INTENTIONS[f]": "2"
+        },
+        "validationFailed": true,
+        "messages": [
+          {
+            "language": 3081,
+            "message": "Row a is invalid"
+          }
+        ],
+        "writes": [
+          [
+            "P_INTENTIONS[a]",
+            null
+          ]
+        ]
+      }
+    },
+    {
+      "id": "corpus/grid-clear/6-2",
+      "survey": "surveys/p312541195228.xml",
+      "given": {
+        "fields": {
+          "P_INTENTIONS[a]": "6",
+          "P_INTENTIONS[f]": "2"
+        },
+        "environment": {
+          "language": 3081
+        },
+        "labels": {
+          "standarderrormessage": {
+            "18": "Row a is invalid",
+            "19": "Row f is invalid"
+          }
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652540440",
+            "kind": "ScriptCode"
+          }
+        },
+        {
+          "script": {
+            "entity": "1652542497",
+            "kind": "ValidationCode"
+          }
+        }
+      ],
+      "expect": {
+        "fields": {
+          "P_INTENTIONS[a]": null,
+          "P_INTENTIONS[f]": "2"
+        },
+        "validationFailed": true,
+        "messages": [
+          {
+            "language": 3081,
+            "message": "Row a is invalid"
+          }
+        ],
+        "writes": [
+          [
+            "P_INTENTIONS[a]",
+            null
+          ]
+        ]
+      }
+    },
+    {
+      "id": "corpus/grid-clear/1-5",
+      "survey": "surveys/p312541195228.xml",
+      "given": {
+        "fields": {
+          "P_INTENTIONS[a]": "1",
+          "P_INTENTIONS[f]": "5"
+        },
+        "environment": {
+          "language": 3081
+        },
+        "labels": {
+          "standarderrormessage": {
+            "18": "Row a is invalid",
+            "19": "Row f is invalid"
+          }
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652540440",
+            "kind": "ScriptCode"
+          }
+        },
+        {
+          "script": {
+            "entity": "1652542497",
+            "kind": "ValidationCode"
+          }
+        }
+      ],
+      "expect": {
+        "fields": {
+          "P_INTENTIONS[a]": "1",
+          "P_INTENTIONS[f]": null
+        },
+        "validationFailed": true,
+        "messages": [
+          {
+            "language": 3081,
+            "message": "Row f is invalid"
+          }
+        ],
+        "writes": [
+          [
+            "P_INTENTIONS[f]",
+            null
+          ]
+        ]
+      }
+    },
+    {
+      "id": "corpus/grid-clear/5-6",
+      "survey": "surveys/p312541195228.xml",
+      "given": {
+        "fields": {
+          "P_INTENTIONS[a]": "5",
+          "P_INTENTIONS[f]": "6"
+        },
+        "environment": {
+          "language": 3081
+        },
+        "labels": {
+          "standarderrormessage": {
+            "18": "Row a is invalid",
+            "19": "Row f is invalid"
+          }
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652540440",
+            "kind": "ScriptCode"
+          }
+        },
+        {
+          "script": {
+            "entity": "1652542497",
+            "kind": "ValidationCode"
+          }
+        }
+      ],
+      "expect": {
+        "fields": {
+          "P_INTENTIONS[a]": null,
+          "P_INTENTIONS[f]": null
+        },
+        "validationFailed": true,
+        "messages": [
+          {
+            "language": 3081,
+            "message": "Row f is invalid"
+          }
+        ],
+        "writes": [
+          [
+            "P_INTENTIONS[a]",
+            null
+          ],
+          [
+            "P_INTENTIONS[f]",
+            null
+          ]
+        ]
+      }
+    },
+    {
+      "id": "corpus/grid-clear/missing-missing",
+      "survey": "surveys/p312541195228.xml",
+      "given": {
+        "fields": {
+          "P_INTENTIONS[a]": null,
+          "P_INTENTIONS[f]": null
+        },
+        "environment": {
+          "language": 3081
+        },
+        "labels": {
+          "standarderrormessage": {
+            "18": "Row a is invalid",
+            "19": "Row f is invalid"
+          }
+        }
+      },
+      "steps": [
+        {
+          "script": {
+            "entity": "1652540440",
+            "kind": "ScriptCode"
+          }
+        },
+        {
+          "script": {
+            "entity": "1652542497",
+            "kind": "ValidationCode"
+          }
+        }
+      ],
+      "expect": {
+        "fields": {
+          "P_INTENTIONS[a]": null,
+          "P_INTENTIONS[f]": null
+        },
+        "validationFailed": false,
+        "messages": [],
+        "writes": []
+      }
+    },
+    {
+      "id": "corpus/callable-clock/fixed",
+      "survey": "surveys/p624569876868.xml",
+      "given": {
+        "fields": {
+          "tStart": null
+        },
+        "now": "2026-01-01T00:00:00.000Z"
+      },
+      "steps": [
+        {
+          "route": {
+            "entity": "1652541229"
+          }
+        }
+      ],
+      "expect": {
+        "fields": {
+          "tStart": "2026-01-01T00:00:00.000Z"
+        },
+        "visited": [
+          "1652541229",
+          "1652541227",
+          "1652541228"
+        ]
+      }
+    },
+    {
+      "id": "corpus/loop-mask/empty",
+      "survey": "surveys/p624569876868.xml",
+      "given": {
+        "fields": {
+          "Hid_T1_NEW": []
+        }
+      },
+      "steps": [
+        {
+          "mask": {
+            "entity": "1652543274",
+            "kind": "PrecodeMask"
+          },
+          "equals": []
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/loop-mask/1",
+      "survey": "surveys/p624569876868.xml",
+      "given": {
+        "fields": {
+          "Hid_T1_NEW": [
+            "1"
+          ]
+        }
+      },
+      "steps": [
+        {
+          "mask": {
+            "entity": "1652543274",
+            "kind": "PrecodeMask"
+          },
+          "equals": [
+            "1"
+          ]
+        }
+      ],
+      "expect": {}
+    },
+    {
+      "id": "corpus/loop-mask/2-18",
+      "survey": "surveys/p624569876868.xml",
+      "given": {
+        "fields": {
+          "Hid_T1_NEW": [
+            "2",
+            "18"
+          ]
+        }
+      },
+      "steps": [
+        {
+          "mask": {
+            "entity": "1652543274",
+            "kind": "PrecodeMask"
+          },
+          "equals": [
+            "2",
+            "18"
+          ]
+        }
+      ],
+      "expect": {}
+    }
+  ]
+}
