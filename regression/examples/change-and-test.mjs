@@ -8,7 +8,7 @@ import { createHash } from 'node:crypto';
 import { root } from '../runner.mjs';
 const cli = resolve(root, 'regression/cli.mjs');
 const dir = mkdtempSync(join(tmpdir(), 'forsta-agent-change-'));
-const originalPath = resolve(root, 'surveys/3522RL.xml');
+const originalPath = resolve(root, 'surveys/3522RL-p624569876868.xml');
 const original = readFileSync(originalPath);
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 function run(args, expectedExit = 0) {

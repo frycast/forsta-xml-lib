@@ -1,4 +1,4 @@
-const survey = 'surveys/3522RL.xml';
+const survey = 'surveys/3522RL-p624569876868.xml';
 const script = entity => ({ script: { entity, kind: 'ScriptCode' } });
 const cases = [];
 const add = (id, given, steps, expect) => cases.push({ id: `lulu/${id}`, survey, given, steps, expect });

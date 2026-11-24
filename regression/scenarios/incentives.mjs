@@ -3,8 +3,8 @@ const fields = { incentive_amount: '10', survey_name: 'Synthetic survey', src_jo
 const award = { api: 'SetPanelistCredit', args: [10, 'Synthetic survey (TEST) completed, awarded 10 dollars.', -1, 'fixture-record'] };
 
 for (const [label, survey, table] of [
-  ['lulu', 'surveys/3522RL.xml', [[13, 0, true], [32, 0, true], [14, 0, false], [0, 1, false]]],
-  ['omnibus', 'surveys/9145O2L.xml', [[13, 0, true], [32, 0, false], [0, 0, false], [0, 1, true], [14, 2, true], [0, null, false], [0, -1, false]]],
+  ['lulu', 'surveys/3522RL-p624569876868.xml', [[13, 0, true], [32, 0, true], [14, 0, false], [0, 1, false]]],
+  ['omnibus', 'surveys/9145O2L-p312541195228.xml', [[13, 0, true], [32, 0, false], [0, 0, false], [0, 1, true], [14, 2, true], [0, null, false], [0, -1, false]]],
 ]) {
   for (const [extendedStatus, sections, eligible] of table) {
     for (const dummy of ['N', 'Y', null]) {

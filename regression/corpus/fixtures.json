@@ -3,7 +3,7 @@
   "scenarios": [
     {
       "id": "corpus/mask-union/empty",
-      "survey": "surveys/3470CL.xml",
+      "survey": "surveys/3470CL-p102837425171.xml",
       "given": {
         "fields": {
           "BC_3x9": []
@@ -25,7 +25,7 @@
     },
     {
       "id": "corpus/mask-union/1",
-      "survey": "surveys/3470CL.xml",
+      "survey": "surveys/3470CL-p102837425171.xml",
       "given": {
         "fields": {
           "BC_3x9": [
@@ -50,7 +50,7 @@
     },
     {
       "id": "corpus/mask-union/1-97",
-      "survey": "surveys/3470CL.xml",
+      "survey": "surveys/3470CL-p102837425171.xml",
       "given": {
         "fields": {
           "BC_3x9": [
@@ -76,7 +76,7 @@
     },
     {
       "id": "corpus/mask-union/99",
-      "survey": "surveys/3470CL.xml",
+      "survey": "surveys/3470CL-p102837425171.xml",
       "given": {
         "fields": {
           "BC_3x9": [
@@ -100,7 +100,7 @@
     },
     {
       "id": "corpus/mask-union/1-2",
-      "survey": "surveys/3470CL.xml",
+      "survey": "surveys/3470CL-p102837425171.xml",
       "given": {
         "fields": {
           "BC_3x9": [
@@ -127,7 +127,7 @@
     },
     {
       "id": "corpus/device-mask/1-na-na",
-      "survey": "surveys/3470CL.xml",
+      "survey": "surveys/3470CL-p102837425171.xml",
       "given": {
         "fields": {
           "BC_2x3_loop": "1"
@@ -158,7 +158,7 @@
     },
     {
       "id": "corpus/device-mask/2-na-na",
-      "survey": "surveys/3470CL.xml",
+      "survey": "surveys/3470CL-p102837425171.xml",
       "given": {
         "fields": {
           "BC_2x3_loop": "2"
@@ -190,7 +190,7 @@
     },
     {
       "id": "corpus/device-mask/3-na-na",
-      "survey": "surveys/3470CL.xml",
+      "survey": "surveys/3470CL-p102837425171.xml",
       "given": {
         "fields": {
           "BC_2x3_loop": "3"
@@ -222,7 +222,7 @@
     },
     {
       "id": "corpus/device-mask/7-2-na",
-      "survey": "surveys/3470CL.xml",
+      "survey": "surveys/3470CL-p102837425171.xml",
       "given": {
         "fields": {
           "BC_2x3_loop": "7",
@@ -253,7 +253,7 @@
     },
     {
       "id": "corpus/device-mask/7-1-1",
-      "survey": "surveys/3470CL.xml",
+      "survey": "surveys/3470CL-p102837425171.xml",
       "given": {
         "fields": {
           "BC_2x3_loop": "7",
@@ -286,7 +286,7 @@
     },
     {
       "id": "corpus/device-mask/7-1-2",
-      "survey": "surveys/3470CL.xml",
+      "survey": "surveys/3470CL-p102837425171.xml",
       "given": {
         "fields": {
           "BC_2x3_loop": "7",
@@ -318,7 +318,7 @@
     },
     {
       "id": "corpus/question-mask/missing",
-      "survey": "surveys/3511L.xml",
+      "survey": "surveys/3511L-p126373808691.xml",
       "given": {
         "fields": {
           "Q2": null
@@ -337,7 +337,7 @@
     },
     {
       "id": "corpus/question-mask/10",
-      "survey": "surveys/3511L.xml",
+      "survey": "surveys/3511L-p126373808691.xml",
       "given": {
         "fields": {
           "Q2": [
@@ -358,7 +358,7 @@
     },
     {
       "id": "corpus/question-mask/1-10",
-      "survey": "surveys/3511L.xml",
+      "survey": "surveys/3511L-p126373808691.xml",
       "given": {
         "fields": {
           "Q2": [
@@ -380,7 +380,7 @@
     },
     {
       "id": "corpus/question-mask/1",
-      "survey": "surveys/3511L.xml",
+      "survey": "surveys/3511L-p126373808691.xml",
       "given": {
         "fields": {
           "Q2": [
@@ -401,7 +401,7 @@
     },
     {
       "id": "corpus/scale-mask/empty",
-      "survey": "surveys/3530BL.xml",
+      "survey": "surveys/3530BL-p514002831313.xml",
       "given": {
         "domains": {
           "QD6_1": []
@@ -421,7 +421,7 @@
     },
     {
       "id": "corpus/scale-mask/1-2-100",
-      "survey": "surveys/3530BL.xml",
+      "survey": "surveys/3530BL-p514002831313.xml",
       "given": {
         "domains": {
           "QD6_1": [
@@ -448,7 +448,7 @@
     },
     {
       "id": "corpus/scale-mask/100",
-      "survey": "surveys/3530BL.xml",
+      "survey": "surveys/3530BL-p514002831313.xml",
       "given": {
         "domains": {
           "QD6_1": [
@@ -470,7 +470,7 @@
     },
     {
       "id": "corpus/scale-mask/2-1",
-      "survey": "surveys/3530BL.xml",
+      "survey": "surveys/3530BL-p514002831313.xml",
       "given": {
         "domains": {
           "QD6_1": [
@@ -496,7 +496,7 @@
     },
     {
       "id": "corpus/column-mask/hidden-empty",
-      "survey": "surveys/shell-1.2/3593AL.xml",
+      "survey": "surveys/shell-1.2/3593AL-p280853323149.xml",
       "given": {
         "fields": {
           "DKShowQ17": null,
@@ -516,7 +516,7 @@
     },
     {
       "id": "corpus/column-mask/shown-empty",
-      "survey": "surveys/shell-1.2/3593AL.xml",
+      "survey": "surveys/shell-1.2/3593AL-p280853323149.xml",
       "given": {
         "fields": {
           "DKShowQ17": "1",
@@ -536,7 +536,7 @@
     },
     {
       "id": "corpus/column-mask/hidden-selected",
-      "survey": "surveys/shell-1.2/3593AL.xml",
+      "survey": "surveys/shell-1.2/3593AL-p280853323149.xml",
       "given": {
         "fields": {
           "DKShowQ17": null,
@@ -558,7 +558,7 @@
     },
     {
       "id": "corpus/column-mask/shown-selected",
-      "survey": "surveys/shell-1.2/3593AL.xml",
+      "survey": "surveys/shell-1.2/3593AL-p280853323149.xml",
       "given": {
         "fields": {
           "DKShowQ17": "1",
@@ -1000,7 +1000,7 @@
     },
     {
       "id": "corpus/grid-clear/1-2",
-      "survey": "surveys/9145O2L.xml",
+      "survey": "surveys/9145O2L-p312541195228.xml",
       "given": {
         "fields": {
           "P_INTENTIONS[a]": "1",
@@ -1042,7 +1042,7 @@
     },
     {
       "id": "corpus/grid-clear/5-2",
-      "survey": "surveys/9145O2L.xml",
+      "survey": "surveys/9145O2L-p312541195228.xml",
       "given": {
         "fields": {
           "P_INTENTIONS[a]": "5",
@@ -1094,7 +1094,7 @@
     },
     {
       "id": "corpus/grid-clear/6-2",
-      "survey": "surveys/9145O2L.xml",
+      "survey": "surveys/9145O2L-p312541195228.xml",
       "given": {
         "fields": {
           "P_INTENTIONS[a]": "6",
@@ -1146,7 +1146,7 @@
     },
     {
       "id": "corpus/grid-clear/1-5",
-      "survey": "surveys/9145O2L.xml",
+      "survey": "surveys/9145O2L-p312541195228.xml",
       "given": {
         "fields": {
           "P_INTENTIONS[a]": "1",
@@ -1198,7 +1198,7 @@
     },
     {
       "id": "corpus/grid-clear/5-6",
-      "survey": "surveys/9145O2L.xml",
+      "survey": "surveys/9145O2L-p312541195228.xml",
       "given": {
         "fields": {
           "P_INTENTIONS[a]": "5",
@@ -1254,7 +1254,7 @@
     },
     {
       "id": "corpus/grid-clear/missing-missing",
-      "survey": "surveys/9145O2L.xml",
+      "survey": "surveys/9145O2L-p312541195228.xml",
       "given": {
         "fields": {
           "P_INTENTIONS[a]": null,
@@ -1296,7 +1296,7 @@
     },
     {
       "id": "corpus/callable-clock/fixed",
-      "survey": "surveys/3522RL.xml",
+      "survey": "surveys/3522RL-p624569876868.xml",
       "given": {
         "fields": {
           "tStart": null
@@ -1323,7 +1323,7 @@
     },
     {
       "id": "corpus/loop-mask/empty",
-      "survey": "surveys/3522RL.xml",
+      "survey": "surveys/3522RL-p624569876868.xml",
       "given": {
         "fields": {
           "Hid_T1_NEW": []
@@ -1342,7 +1342,7 @@
     },
     {
       "id": "corpus/loop-mask/1",
-      "survey": "surveys/3522RL.xml",
+      "survey": "surveys/3522RL-p624569876868.xml",
       "given": {
         "fields": {
           "Hid_T1_NEW": [
@@ -1365,7 +1365,7 @@
     },
     {
       "id": "corpus/loop-mask/2-18",
-      "survey": "surveys/3522RL.xml",
+      "survey": "surveys/3522RL-p624569876868.xml",
       "given": {
         "fields": {
           "Hid_T1_NEW": [

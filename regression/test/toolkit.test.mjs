@@ -190,7 +190,7 @@ test('CLI fails empty selection and writes deterministic JSON and valid JUnit', 
   const parsed = spawnSync(process.env.PYTHON || 'python3', ['-c', 'import sys,xml.etree.ElementTree as E; r=E.parse(sys.argv[1]).getroot(); assert r.attrib["tests"]=="1"', join(dir, 'test.xml')]);
   assert.equal(parsed.status, 0);
   // Deliberately failing fixture proves exit code and artifacts, not just a unit assertion.
-  writeFileSync(join(dir, 'bad.mjs'), `export default [{id:'bad',survey:'surveys/3519L.xml',given:{},steps:[{script:{entity:'1652542302',kind:'ScriptCode'}}],expect:{}}];`);
+  writeFileSync(join(dir, 'bad.mjs'), `export default [{id:'bad',survey:'surveys/3519L-p177291954851.xml',given:{},steps:[{script:{entity:'1652542302',kind:'ScriptCode'}}],expect:{}}];`);
   const child = spawnSync(process.execPath, [cli, 'test', '--suite', dir, '--json', join(dir, 'failure.json'), '--junit', join(dir, 'failure.xml')], { encoding: 'utf8' });
   assert.equal(child.status, 1);
   assert.equal(JSON.parse(readFileSync(join(dir, 'failure.json'))).failed, 1);

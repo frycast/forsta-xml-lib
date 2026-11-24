@@ -37,8 +37,8 @@ selectors also make the corpus stale. Default and example tests then exit 4.
 
 ```sh
 node regression/cli.mjs inspect surveys/3374-p197227522938.xml --entity 1652542194
-node regression/cli.mjs inspect surveys/3522RL.xml --entity 1652543274 --json -
-node regression/cli.mjs extract surveys/3522RL.xml --json regression-output/extracted.json
+node regression/cli.mjs inspect surveys/3522RL-p624569876868.xml --entity 1652543274 --json -
+node regression/cli.mjs extract surveys/3522RL-p624569876868.xml --json regression-output/extracted.json
 ```
 
 Inspection retains numeric/hidden/background attributes, answer configurations,
