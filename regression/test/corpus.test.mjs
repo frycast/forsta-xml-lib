@@ -25,7 +25,8 @@ function synthetic(t, xml) {
 }
 
 test('every case belongs to one versioned example and source selectors resolve', () => {
-  assert.equal(checkProvenance(cases).status, 'current');
+  const freshness = checkProvenance(cases);
+  assert.equal(freshness.status, 'current', JSON.stringify(freshness.stale.map(({ id, reason, expected, actual }) => ({ id, reason, differingKeys: expected && actual ? Object.keys(actual).filter(key => JSON.stringify(expected[key]) !== JSON.stringify(actual[key])) : [], expectedSurvey: expected?.survey, actualSurvey: actual?.survey, expectedHash: expected?.sha256, actualHash: actual?.sha256, expectedBlocks: expected?.blocks?.length, actualBlocks: actual?.blocks?.length, expectedNodes: expected?.nodes?.length, actualNodes: actual?.nodes?.length })), null, 2));
   const assigned = new Map();
   for (const e of catalogue().examples) {
     const selected = exampleCases(e, cases);
