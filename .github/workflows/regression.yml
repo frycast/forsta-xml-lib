@@ -36,11 +36,21 @@ jobs:
           node regression/cli.mjs inventory --json regression-output/inventory.json
           python - <<'PYTHON'
           import json
+          import xml.etree.ElementTree as ET
           from pathlib import Path
           report = json.loads(Path("regression-output/inventory.json").read_text())
           expected = {path.as_posix() for path in Path("surveys").rglob("*.xml")}
           found = {row["file"] for row in report["files"]}
           assert found == expected, f"Inventory differs from surveys/: {sorted(found ^ expected)}"
+          for file in sorted(expected):
+              fields = ET.parse(file).findall("./ProjectInfo/SurveyFields/SurveyField")
+              family, = [f.get("Value") for f in fields if f.get("Name") == "LinA_flag"]
+              versions = [f.get("Value") for f in fields if f.get("Name") == "shell_version"]
+              version, = versions or ["0"]
+              assert version and version.strip() == version, f"Invalid shell_version in {file}"
+              folder = {"Y": "lina_shell", "N": "src_shell"}[family]
+              parent = Path("surveys", folder, f"shell-{version}")
+              assert Path(file).parent == parent, f"{file} belongs in {parent}"
           PYTHON
       - uses: actions/upload-artifact@v4
         if: always()
