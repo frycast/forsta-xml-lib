@@ -22,6 +22,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Test survey library CLI
+        run: python -m unittest discover -s utils
       - name: Test toolkit and mutation detection
         run: node --test regression/test/*.test.mjs
       - name: Check pinned corpus sources
@@ -36,21 +38,16 @@ jobs:
           node regression/cli.mjs inventory --json regression-output/inventory.json
           python - <<'PYTHON'
           import json
-          import xml.etree.ElementTree as ET
+          from utils.surveys import destination, project_info
           from pathlib import Path
           report = json.loads(Path("regression-output/inventory.json").read_text())
           expected = {path.as_posix() for path in Path("surveys").rglob("*.xml")}
           found = {row["file"] for row in report["files"]}
           assert found == expected, f"Inventory differs from surveys/: {sorted(found ^ expected)}"
           for file in sorted(expected):
-              fields = ET.parse(file).findall("./ProjectInfo/SurveyFields/SurveyField")
-              family, = [f.get("Value") for f in fields if f.get("Name") == "LinA_flag"]
-              versions = [f.get("Value") for f in fields if f.get("Name") == "shell_version"]
-              version, = versions or ["0"]
-              assert version and version.strip() == version, f"Invalid shell_version in {file}"
-              folder = {"Y": "lina_shell", "N": "src_shell"}[family]
-              parent = Path("surveys", folder, f"shell-{version}")
-              assert Path(file).parent == parent, f"{file} belongs in {parent}"
+              path = Path(file)
+              target = Path("surveys") / destination(project_info(path))
+              assert path == target, f"{path} belongs at {target}"
           PYTHON
       - uses: actions/upload-artifact@v4
         if: always()
