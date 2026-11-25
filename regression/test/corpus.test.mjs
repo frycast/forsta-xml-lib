@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { mkdtempSync, rmSync, readFileSync, writeFileSync, cpSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { root, loadSurvey, loadSurveys, runScenario, select } from '../runner.mjs';
@@ -25,7 +25,8 @@ function synthetic(t, xml) {
 }
 
 test('every case belongs to one versioned example and source selectors resolve', () => {
-  assert.equal(checkProvenance(cases).status, 'current');
+  const freshness = checkProvenance(cases);
+  assert.equal(freshness.status, 'current', JSON.stringify(freshness.stale.map(({ id, reason, expected, actual }) => ({ id, reason, differingKeys: expected && actual ? Object.keys(actual).filter(key => JSON.stringify(expected[key]) !== JSON.stringify(actual[key])) : [], expectedSurvey: expected?.survey, actualSurvey: actual?.survey, expectedHash: expected?.sha256, actualHash: actual?.sha256, expectedBlocks: expected?.blocks?.length, actualBlocks: actual?.blocks?.length, expectedNodes: expected?.nodes?.length, actualNodes: actual?.nodes?.length })), null, 2));
   const assigned = new Map();
   for (const e of catalogue().examples) {
     const selected = exampleCases(e, cases);
@@ -120,24 +121,24 @@ test('CLI discovery, inspection and portable fixtures work from another cwd', t 
   assert.equal(r.status,0); assert.ok(r.report.examples.some(e=>e.id==='mask/selected-plus-exclusive'));
   r = invoke(['fixture','routing/single-followup'], dir); assert.equal(r.status,0);
   const fixture = join(dir,'fixture.json'); writeFileSync(fixture, JSON.stringify(r.report));
-  const file = join(dir,'changed survey.xml'); const original = readFileSync(resolve(root,'surveys/3522RL-p624569876868.xml'),'utf8');
+  const file = join(dir,'changed survey.xml'); const original = readFileSync(resolve(root,'surveys/lina_shell/shell-0/3522RL-p624569876868.xml'),'utf8');
   writeFileSync(file, original);
   r = invoke(['test',file,'--fixtures',fixture], dir); assert.equal(r.status,0); assert.equal(r.report.passed,3);
   assert.equal(r.stderr,'');
   r = invoke(['inspect',file,'--entity','1652543210'],dir);
   assert.equal(r.status,0); assert.ok(r.report.blocks.length); assert.ok(r.report.ancestors.length);
-  const source = select(loadSurvey('surveys/3522RL-p624569876868.xml').blocks,{entity:'1652543210',kind:'Expression'});
+  const source = select(loadSurvey('surveys/lina_shell/shell-0/3522RL-p624569876868.xml').blocks,{entity:'1652543210',kind:'Expression'});
   const encoded = source.code.replaceAll('&','&amp;').replaceAll('>','&gt;').replaceAll('<','&lt;');
   assert.equal(original.split(encoded).length,2,'worked source expression must be unique');
   writeFileSync(file,original.replace(encoded,encoded.replace('&gt; 1','&gt; 0')));
   r = invoke(['test',file,'--fixtures',fixture],dir); assert.equal(r.status,1);
   const failure=r.report.results.find(x=>x.status==='failed');
   assert.ok(failure.failure.source); assert.ok(Object.hasOwn(failure.failure,'expected'));
-  assert.ok(failure.actual.trace); assert.equal(readFileSync(resolve(root,'surveys/3522RL-p624569876868.xml'),'utf8'),original);
+  assert.ok(failure.actual.trace); assert.equal(readFileSync(resolve(root,'surveys/lina_shell/shell-0/3522RL-p624569876868.xml'),'utf8'),original);
 });
 
 test('CLI reports missing values, unsupported routes, invalid input and deterministic JSON', t => {
-  const dir = temporary(t), fixture=join(dir,'cases.json'), file=resolve(root,'surveys/3522RL-p624569876868.xml');
+  const dir = temporary(t), fixture=join(dir,'cases.json'), file=resolve(root,'surveys/lina_shell/shell-0/3522RL-p624569876868.xml');
   const c={id:'missing',steps:[{expression:{entity:'1652543210',kind:'Expression'},equals:true}],given:{},expect:{}};
   const write=c=>writeFileSync(fixture,JSON.stringify({schemaVersion:1,scenarios:[c]}));
   write(c);
@@ -160,8 +161,12 @@ test('CLI reports missing values, unsupported routes, invalid input and determin
 test('CLI detects changed and removed source blocks as stale in a disposable checkout', t => {
   const dir=temporary(t);cpSync(resolve(root,'regression'),join(dir,'regression'),{recursive:true});
   mkdirSync(join(dir,'surveys'));
-  for (const file of new Set(catalogue().examples.map(e=>e.survey))) cpSync(resolve(root,file),join(dir,file));
-  const target=join(dir,'regression/cli.mjs'), path=join(dir,'surveys/3522RL-p624569876868.xml');
+  for (const file of new Set(catalogue().examples.map(e=>e.survey))) {
+    const destination = join(dir, file);
+    mkdirSync(dirname(destination), { recursive: true });
+    cpSync(resolve(root, file), destination);
+  }
+  const target=join(dir,'regression/cli.mjs'), path=join(dir,'surveys/lina_shell/shell-0/3522RL-p624569876868.xml');
   const original=readFileSync(path,'utf8');
   writeFileSync(path,original.replace("f('A10').size() &gt; 1", "f('A10').size() &gt; 0"));
   let r=invoke(['corpus','check'],dir,target);assert.equal(r.status,4);assert.equal(r.report.status,'stale');

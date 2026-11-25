@@ -1,4 +1,4 @@
-const survey = 'surveys/3519L-p177291954851.xml';
+const survey = 'surveys/lina_shell/shell-0/3519L-p177291954851.xml';
 const cases = [];
 // Row = previous state, column = new query value. DONE is absorbing; SCREEN
 // may become DONE. Arbitrary codes do not automatically establish completion.
