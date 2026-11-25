@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { mkdtempSync, rmSync, readFileSync, writeFileSync, cpSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { root, loadSurvey, loadSurveys, runScenario, select } from '../runner.mjs';
@@ -160,7 +160,11 @@ test('CLI reports missing values, unsupported routes, invalid input and determin
 test('CLI detects changed and removed source blocks as stale in a disposable checkout', t => {
   const dir=temporary(t);cpSync(resolve(root,'regression'),join(dir,'regression'),{recursive:true});
   mkdirSync(join(dir,'surveys'));
-  for (const file of new Set(catalogue().examples.map(e=>e.survey))) cpSync(resolve(root,file),join(dir,file));
+  for (const file of new Set(catalogue().examples.map(e=>e.survey))) {
+    const destination = join(dir, file);
+    mkdirSync(dirname(destination), { recursive: true });
+    cpSync(resolve(root, file), destination);
+  }
   const target=join(dir,'regression/cli.mjs'), path=join(dir,'surveys/3522RL-p624569876868.xml');
   const original=readFileSync(path,'utf8');
   writeFileSync(path,original.replace("f('A10').size() &gt; 1", "f('A10').size() &gt; 0"));
