@@ -168,7 +168,7 @@ function xmlSpans(text: string): Span[] {
       return { name: m[1], span: { start: start + offset, end: start + offset + m[3].length, secret: false, entities: true } };
     });
     // A questionnaire node named "password" is not a configuration value.
-    const label = /^(?:property|config|setting|parameter|param|entry|add|header)$/i.test(name)
+    const label = /^(?:SurveyField|property|config|setting|parameter|param|entry|add|header)$/i.test(name)
       ? attributes.find(a => /^(?:name|key)$/i.test(a.name.split(":").at(-1)!) && secretKey(view(text, a.span).value)) : undefined;
     const labelName = label ? view(text, label.span).value : "";
     for (const attr of attributes) {
