@@ -33,7 +33,7 @@ npm test
 node regression/cli.mjs test --json regression-output/results.json --junit regression-output/results.xml
 node regression/cli.mjs test --case sample-only/scode
 node regression/cli.mjs inventory --json regression-output/inventory.json
-node regression/cli.mjs extract surveys/3522RL-p624569876868.xml --json regression-output/lulu-extracted.json
+node regression/cli.mjs extract surveys/lina_shell/shell-0/3522RL-p624569876868.xml --json regression-output/lulu-extracted.json
 ```
 
 Use `--json -` for JSON-only stdout. Exit codes are 0 (success), 1 (test
@@ -87,7 +87,7 @@ test code; they must not make network calls or use time/randomness to build case
 ```js
 export default [{
   id: 'lulu/example-autocode-single-answer',
-  survey: 'surveys/3522RL-p624569876868.xml',
+  survey: 'surveys/lina_shell/shell-0/3522RL-p624569876868.xml',
   given: { fields: { A10: ['2'], A11: null } },
   steps: [{ route: { entity: '1652543210' } }],
   expect: {

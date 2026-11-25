@@ -6,7 +6,7 @@
       "id": "routing/advice-category",
       "title": "Calculate wording categories within a routed section",
       "status": "characterised",
-      "survey": "surveys/3522RL-p624569876868.xml",
+      "survey": "surveys/lina_shell/shell-0/3522RL-p624569876868.xml",
       "scenarioPrefixes": [
         "lulu/advice-priority/",
         "lulu/other-recontact-group-skips-advice"
@@ -46,7 +46,7 @@
       "id": "routing/single-followup",
       "title": "Ask a follow-up only for multiple answers",
       "status": "characterised",
-      "survey": "surveys/3522RL-p624569876868.xml",
+      "survey": "surveys/lina_shell/shell-0/3522RL-p624569876868.xml",
       "scenarioPrefixes": [
         "lulu/communication-route/"
       ],
@@ -83,7 +83,7 @@
       "id": "validation/exclusive-options",
       "title": "Reject conflicting multicode answers",
       "status": "characterised",
-      "survey": "surveys/3522RL-p624569876868.xml",
+      "survey": "surveys/lina_shell/shell-0/3522RL-p624569876868.xml",
       "scenarioPrefixes": [
         "lulu/complaint-exclusivity/"
       ],
@@ -117,7 +117,7 @@
       "id": "respondent/session-clock",
       "title": "Update session fields at a fixed time",
       "status": "characterised",
-      "survey": "surveys/3522RL-p624569876868.xml",
+      "survey": "surveys/lina_shell/shell-0/3522RL-p624569876868.xml",
       "scenarioPrefixes": [
         "lulu/global-validation-fixed-clock-and-loop-cell"
       ],
@@ -154,7 +154,7 @@
       "id": "respondent/queue",
       "title": "Map extended statuses to sample state",
       "status": "characterised",
-      "survey": "surveys/3522RL-p624569876868.xml",
+      "survey": "surveys/lina_shell/shell-0/3522RL-p624569876868.xml",
       "scenarioPrefixes": [
         "lulu/queue/",
         "lulu/early-complete-queue-override"
@@ -192,7 +192,7 @@
       "id": "integration/email-category",
       "title": "Characterise mocked email validation categories",
       "status": "characterised",
-      "survey": "surveys/3522RL-p624569876868.xml",
+      "survey": "surveys/lina_shell/shell-0/3522RL-p624569876868.xml",
       "scenarioPrefixes": [
         "lulu/email/",
         "lulu/empty-email-does-not-call-service"
@@ -233,7 +233,7 @@
       "id": "incentive/standard",
       "title": "Standard-shell credit eligibility",
       "status": "characterised",
-      "survey": "surveys/3522RL-p624569876868.xml",
+      "survey": "surveys/lina_shell/shell-0/3522RL-p624569876868.xml",
       "scenarioPrefixes": [
         "lulu/incentive/",
         "lulu/additional-incentive-disabled"
@@ -270,7 +270,7 @@
       "id": "incentive/omnibus",
       "title": "Omnibus credit eligibility by sections",
       "status": "characterised",
-      "survey": "surveys/9145O2L-p312541195228.xml",
+      "survey": "surveys/lina_shell/shell-0/9145O2L-p312541195228.xml",
       "scenarioPrefixes": [
         "omnibus/incentive/",
         "omnibus/additional-incentive-disabled"
@@ -307,7 +307,7 @@
       "id": "redirect/completion-state",
       "title": "Protect completed outcomes on return",
       "status": "characterised",
-      "survey": "surveys/3519L-p177291954851.xml",
+      "survey": "surveys/lina_shell/shell-0/3519L-p177291954851.xml",
       "scenarioPrefixes": [
         "sample-only/scode/"
       ],
@@ -346,7 +346,7 @@
       "id": "redirect/sample-link",
       "title": "Build a redirect using a sample URL",
       "status": "characterised",
-      "survey": "surveys/3519L-p177291954851.xml",
+      "survey": "surveys/lina_shell/shell-0/3519L-p177291954851.xml",
       "scenarioPrefixes": [
         "sample-only/redirect-preserves-sid"
       ],
@@ -384,7 +384,7 @@
       "id": "mask/selected-plus-exclusive",
       "title": "Union earlier selections with fixed options",
       "status": "characterised",
-      "survey": "surveys/3470CL-p102837425171.xml",
+      "survey": "surveys/lina_shell/shell-0/3470CL-p102837425171.xml",
       "scenarioPrefixes": [
         "corpus/mask-union/"
       ],
@@ -418,7 +418,7 @@
       "id": "mask/device-options",
       "title": "Use a source helper for a context-dependent option set",
       "status": "characterised",
-      "survey": "surveys/3470CL-p102837425171.xml",
+      "survey": "surveys/lina_shell/shell-0/3470CL-p102837425171.xml",
       "scenarioPrefixes": [
         "corpus/device-mask/"
       ],
@@ -462,7 +462,7 @@
       "id": "mask/question",
       "title": "Show a follow-up for a selected code",
       "status": "characterised",
-      "survey": "surveys/3511L-p126373808691.xml",
+      "survey": "surveys/lina_shell/shell-0/3511L-p126373808691.xml",
       "scenarioPrefixes": [
         "corpus/question-mask/"
       ],
@@ -494,7 +494,7 @@
       "id": "mask/scale",
       "title": "Remove a scale option using an explicit domain",
       "status": "characterised",
-      "survey": "surveys/3530BL-p514002831313.xml",
+      "survey": "surveys/lina_shell/shell-0/3530BL-p514002831313.xml",
       "scenarioPrefixes": [
         "corpus/scale-mask/"
       ],
@@ -531,7 +531,7 @@
       "id": "mask/grid-columns",
       "title": "Reveal a DK column after prompting or an existing answer",
       "status": "characterised",
-      "survey": "surveys/shell-1.2/3593AL-p280853323149.xml",
+      "survey": "surveys/lina_shell/shell-1.2/3593AL-p280853323149.xml",
       "scenarioPrefixes": [
         "corpus/column-mask/"
       ],
@@ -566,7 +566,7 @@
       "id": "validation/months-worked",
       "title": "Validate a numeric range using an earlier answer",
       "status": "characterised",
-      "survey": "surveys/3374-p197227522938.xml",
+      "survey": "surveys/src_shell/shell-0/3374-p197227522938.xml",
       "scenarioPrefixes": [
         "corpus/months-worked/"
       ],
@@ -611,7 +611,7 @@
       "id": "validation/grid-row-clear",
       "title": "Clear invalid grid cells and report the last error",
       "status": "characterised",
-      "survey": "surveys/9145O2L-p312541195228.xml",
+      "survey": "surveys/lina_shell/shell-0/9145O2L-p312541195228.xml",
       "scenarioPrefixes": [
         "corpus/grid-clear/"
       ],
@@ -652,7 +652,7 @@
       "id": "routing/callable-clock",
       "title": "Follow a call to its original callable block",
       "status": "characterised",
-      "survey": "surveys/3522RL-p624569876868.xml",
+      "survey": "surveys/lina_shell/shell-0/3522RL-p624569876868.xml",
       "scenarioPrefixes": [
         "corpus/callable-clock/"
       ],
@@ -690,7 +690,7 @@
       "id": "structure/loop-members",
       "title": "Inspect a masked loop with conditional member wording",
       "status": "characterised",
-      "survey": "surveys/3522RL-p624569876868.xml",
+      "survey": "surveys/lina_shell/shell-0/3522RL-p624569876868.xml",
       "scenarioPrefixes": [
         "corpus/loop-mask/"
       ],
