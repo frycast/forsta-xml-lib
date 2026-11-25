@@ -2,6 +2,7 @@ import contextlib
 import io
 import json
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -64,6 +65,23 @@ class SurveyCLI(unittest.TestCase):
         ET.SubElement(fields, "SurveyField", Name="src_job_id", Value="9999")
         with self.assertRaises(ValueError):
             surveys.destination(info)
+
+    @unittest.skipUnless(shutil.which("bun") and shutil.which("betterleaks"), "requires Bun and Betterleaks 1.9.x")
+    def test_real_redactor(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            original = root / "input.xml"
+            project = export(version="1.2")
+            fields = project.find("./ProjectInfo/SurveyFields")
+            ET.SubElement(fields, "SurveyField", Name="password", Value="synthetic-test-password")
+            ET.ElementTree(project).write(original)
+            library = root / "library"
+            with patch.object(surveys, "SURVEYS", library), contextlib.redirect_stdout(io.StringIO()):
+                surveys.store(SimpleNamespace(input=original, betterleaks=None))
+            target = library / "lina_shell/shell-1.2/3522RL-p123.xml"
+            query = "./ProjectInfo/SurveyFields/SurveyField[@Name='password']"
+            self.assertEqual(ET.parse(target).find(query).get("Value"), "redacted")
+            self.assertEqual(ET.parse(original).find(query).get("Value"), "synthetic-test-password")
 
     def test_store_uses_only_successful_redactor_output(self):
         with tempfile.TemporaryDirectory() as tmp:
