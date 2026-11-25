@@ -12,3 +12,13 @@ node regression/cli.mjs test --example mask/device-options
 ```
 
 The [behaviour catalogue](regression/docs/corpus.md) explains what each example tests and which checks require Forsta.
+
+Use the survey CLI from the repository root to find exports by `ProjectInfo/@CreatedDate`. It uses Python 3.10+ and the standard library.
+
+```sh
+python utils/surveys.py list --limit 1 --json
+python utils/surveys.py list --since 2026-10-01 --before 2026-11-01
+python utils/surveys.py store "/path/to/inbox"
+```
+
+The [redact-secrets-and-store skill](.agents/skills/redact-secrets-and-store/SKILL.md) explains import prerequisites, output paths and retries.
