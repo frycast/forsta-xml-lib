@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { mkdirSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { compileStatus, coverage, junit, loadSurvey, loadSurveys, root, runScenario } from './runner.mjs';
@@ -19,8 +19,14 @@ const help = `Offline Forsta development and regression CLI (Node 24, Python 3.1
 All commands: --json - (JSON only on stdout) or --json file
 Test reports: --junit file. Exit 0=success, 1=test failure/empty selection,
 2=invalid input/tool error, 4=stale corpus. No production access is used.
-See regression/docs/agent-workflow.md. CLI input paths resolve from your cwd.`;
+See regression/docs/agent-workflow.md. Survey inputs accept a local path or a shell-family path from the survey list.`;
 const json = value => JSON.stringify(value, null, 2) + '\n';
+function surveyPath(file) {
+  const local = resolve(file);
+  if (existsSync(local) || !/^(?:lina_shell|src_shell)\//.test(file)) return local;
+  const libraryFile = resolve(root, 'surveys', file);
+  return existsSync(libraryFile) ? libraryFile : local;
+}
 function save(path, content) {
   mkdirSync(dirname(resolve(path)), { recursive: true });
   writeFileSync(path, content);
@@ -87,7 +93,7 @@ try {
       output({ schemaVersion: 1, command: 'corpus lock', examples: report.examples.length, revision: report.revision }, `Pinned ${report.examples.length} examples to ${report.revision}.`);
     } else fail('Use corpus check or corpus lock');
   } else if (command === 'inspect' || command === 'extract') {
-    const survey = loadSurveys([resolve(file)])[0];
+    const survey = loadSurveys([surveyPath(file)])[0];
     if (command === 'extract') output(survey, values.json ? `Extracted ${survey.file}` : json(survey));
     else {
       const selectors = ['entity','name','key'].filter(k => values[k]);
@@ -116,7 +122,8 @@ try {
     if (values.fixtures && !file) fail('--fixtures requires an explicit XML file');
     if ((file || values.fixtures) && (values.example || values.suite)) fail('Local XML fixtures cannot be combined with --example or --suite');
     if (values.example && values.suite) fail('--example cannot be combined with --suite');
-    let scenarios = file ? readFixtures(resolve(values.fixtures)).map(s => ({ ...s, survey: resolve(file) }))
+    const localSurvey = file && surveyPath(file);
+    let scenarios = file ? readFixtures(resolve(values.fixtures)).map(s => ({ ...s, survey: localSurvey }))
       : values.suite ? await loadCases(resolve(values.suite)) : await allCases();
     if (new Set(scenarios.map(s => s.id)).size !== scenarios.length) fail('Duplicate scenario IDs');
     if (values.example) scenarios = exampleCases(example(values.example), scenarios);
