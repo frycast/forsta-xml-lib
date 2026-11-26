@@ -134,10 +134,61 @@ class SurveyCLI(unittest.TestCase):
                 self.assertEqual(target.read_bytes(), cleaned.read_bytes())
                 surveys.store(args)
                 target.write_text("keep existing")
-                with self.assertRaisesRegex(ValueError, "different content"):
-                    surveys.store(args)
+                self.assertEqual(surveys.store(args), 3)
                 self.assertEqual(target.read_text(), "keep existing")
                 self.assertEqual(original.read_text(), "synthetic raw input")
+
+    def test_review_then_resume_mixed_decisions(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            output = root / "redact-secrets-output"
+            output.mkdir()
+            library = root / "library"
+            names = ["1001.xml", "1002.xml", "1003.xml"]
+            targets = []
+            for name in names:
+                project = export(job=Path(name).stem)
+                ET.ElementTree(project).write(output / name)
+                target = library / surveys.destination(project.find("ProjectInfo"))
+                targets.append(target)
+            targets[0].parent.mkdir(parents=True)
+            for target in targets[:2]:
+                target.write_text("previous")
+            report = {"files_processed": 3, "files": [{"filename": n} for n in names]}
+            (output / "redaction-report.json").write_text(json.dumps(report))
+            paths = [t.relative_to(library).as_posix() for t in targets]
+            args = SimpleNamespace(output=output, review=None, keep_all=False, replace_all=False, replace=None)
+            def run():
+                with contextlib.redirect_stdout(io.StringIO()) as stdout:
+                    status = surveys.resume(args)
+                return status, stdout.getvalue()
+            with patch.object(surveys, "SURVEYS", library):
+                status, message = run()
+                self.assertEqual(status, 3)
+                review = json.loads(message)
+                self.assertEqual(review["conflicts"], paths[:2])
+                args.review, args.replace = review["review"], [paths[1]]
+                for changed in (targets[0], output / names[1]):
+                    with changed.open("ab") as stream:
+                        stream.write(b" ")
+                    status, message = run()
+                    self.assertEqual(status, 3)
+                    self.assertFalse(targets[2].exists())
+                    args.review = json.loads(message)["review"]
+                self.assertEqual(run()[0], 0)
+                self.assertEqual(targets[0].read_text(), "previous ")
+                for target, name in zip(targets[1:], names[1:]):
+                    self.assertEqual(target.read_bytes(), (output / name).read_bytes())
+                args.review, args.replace = None, None
+                status, message = run()
+                self.assertEqual(status, 3)
+                self.assertEqual(json.loads(message)["conflicts"], paths[:1])
+                args.review, args.keep_all = json.loads(message)["review"], True
+                self.assertEqual(run()[0], 0)
+                self.assertEqual(targets[0].read_text(), "previous ")
+                args.keep_all, args.replace_all = False, True
+                self.assertEqual(run()[0], 0)
+                self.assertEqual(targets[0].read_bytes(), (output / names[0]).read_bytes())
 
 
 if __name__ == "__main__":

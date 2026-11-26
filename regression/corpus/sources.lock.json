@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "corpusVersion": "1.0.0",
-  "revision": "c4b074750dbebf332ee6b05b21f5c5baf7493e28",
+  "revision": "b52cf9ed2024f06132730a7788d4d924231c1e24",
   "catalogueHash": "2a1ecff5d7925d58076d7cf0c7c2f1e863186b6707ca61af5208320fcb4655fb",
   "examples": [
     {
@@ -516,7 +516,7 @@
     {
       "id": "mask/grid-columns",
       "survey": "surveys/lina_shell/shell-1.2/3593AL-p280853323149.xml",
-      "sha256": "5c6f47cbfffb8836c4430a2842148403993348b928c6458edab439493e008d93",
+      "sha256": "19b0f00ef89264e85876f856db5bda2d85950cf12dd4d67189b2c98805758b68",
       "blocks": [
         {
           "key": "/Project[1]/Questionnaire[1]/Routing[1]/Nodes[1]/Folder[5]/Nodes[1]/Folder[4]/Nodes[1]/Grid3D[1]/Nodes[1]/Multi[1]/ValidationCode[1]",
