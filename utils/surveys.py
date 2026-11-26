@@ -1,4 +1,4 @@
-"""Navigate and import Forsta XML exports. Requires Python 3.10+."""
+"""Find, import, inspect and test Forsta XML exports. Requires Python 3.10+."""
 import argparse
 from datetime import date, datetime, timezone
 import hashlib
@@ -230,6 +230,27 @@ def main():
     choice.add_argument("--keep-all", action="store_true", help="keep all conflicting library copies")
     choice.add_argument("--replace-all", action="store_true", help="replace all reviewed conflicts")
     choice.add_argument("--replace", action="append", metavar="PATH", help="replace this conflict (repeatable); keep other conflicts")
+    regression = {
+        "examples": "search curated survey examples",
+        "show": "show example code, requirements and expected outcomes",
+        "inspect": "inspect survey nodes and scripts",
+        "extract": "extract survey structures and scripts as JSON",
+        "fixture": "export synthetic test inputs and expected outcomes",
+        "test": "run offline survey regression scenarios",
+        "inventory": "summarise structures and repeated scripts across all exports",
+        "corpus": "check pinned example sources or lock a reviewed revision",
+    }
+    for name, summary in regression.items():
+        commands.add_parser(name, help=summary)
+    # The runner owns its argument syntax, stdout, stderr and exit codes.
+    if len(sys.argv) > 1 and sys.argv[1] in regression:
+        env = os.environ.copy()
+        env.setdefault("PYTHON", sys.executable)
+        try:
+            result = subprocess.run(["node", ROOT / "regression/cli.mjs", *sys.argv[1:]], env=env)
+        except FileNotFoundError:
+            parser.exit(2, "Regression commands require Node.js 24 on PATH.\n")
+        sys.exit(result.returncode)
     args = parser.parse_args()
     if args.command == "list" and args.limit is not None and args.limit < 0:
         parser.error("--limit must be non-negative")

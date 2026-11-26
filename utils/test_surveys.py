@@ -27,6 +27,33 @@ def export(created="2026-10-01T00:00:00Z", job="3522RL", version=None):
 
 
 class SurveyCLI(unittest.TestCase):
+    def test_list_inspect_and_fixture_test_workflows(self):
+        cli = [sys.executable, surveys.__file__]
+        with tempfile.TemporaryDirectory() as tmp:
+            def run(*args):
+                return subprocess.check_output([*cli, *args], cwd=tmp, text=True)
+
+            newest = run("list", "--limit", "1").strip()
+            inspected = json.loads(run("inspect", newest, "--json", "-"))
+            self.assertEqual(inspected["command"], "inspect")
+            self.assertTrue(inspected["file"].endswith(newest))
+
+            source = "lina_shell/shell-0/3522RL-p624569876868.xml"
+            fixture = "followup cases.json"
+            run("fixture", "routing/single-followup", "--json", fixture)
+            result = json.loads(run("test", "--fixtures", fixture, source, "--json", "-"))
+            self.assertGreater(result["passed"], 0)
+            self.assertEqual(result["failed"], 0)
+
+            # A working copy at the same relative path takes precedence.
+            local = Path(tmp) / source
+            local.parent.mkdir(parents=True)
+            local.write_text("<invalid")
+            error = subprocess.run([*cli, "inspect", source, "--json", "-"],
+                                   cwd=tmp, capture_output=True, text=True)
+            self.assertEqual(error.returncode, 2)
+            self.assertIn("error", json.loads(error.stdout))
+
     def test_order_filters_and_ties(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
