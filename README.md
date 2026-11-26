@@ -12,3 +12,5 @@ node regression/cli.mjs test --example mask/device-options
 ```
 
 The [behaviour catalogue](regression/docs/corpus.md) explains what each example tests and which checks require Forsta.
+
+See [SURVEYS_CLI.md](SURVEYS_CLI.md) to find surveys by creation date or import redacted exports.
