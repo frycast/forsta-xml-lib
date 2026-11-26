@@ -5,7 +5,7 @@ description: Use when asked to redact and file Forsta XML exports in this survey
 
 Run the CLI from the repository root. Use `python utils/surveys.py --help` or a subcommand's `--help` for its interface.
 
-For an import, keep incoming UTF-8 exports in a separate inbox. Follow the dependency checks in the sibling [redact-secrets skill](../redact-secrets/SKILL.md). Pass the original path directly to the wrapper. It runs that skill's redactor first and reads metadata only from the resulting copies.
+For an import, keep incoming UTF-8 exports in a separate inbox. Follow the dependency checks in the sibling [redact-secrets skill](../redact-secrets/SKILL.md). For loose XML, pass the original path directly to the wrapper. For a batch of ZIPs, first follow the sibling skill’s ZIP extraction step, then pass the resulting XML folder to the wrapper (for example, `python utils/surveys.py store surveys/new/xml`). It runs that skill's redactor first and reads metadata only from the resulting copies.
 
 ```sh
 python utils/surveys.py store "/path/to/export.xml"

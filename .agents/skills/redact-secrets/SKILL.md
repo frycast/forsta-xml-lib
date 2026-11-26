@@ -28,6 +28,14 @@ Before running the CLI, verify that all dependencies are available:
    bun install --cwd "<skill-directory>/scripts" --frozen-lockfile
    ```
 
+For zipped Forsta exports in this repository, use a batch directory with the selected ZIPs at its top level and no existing `xml` subdirectory. From the repository root, run the extractor in PowerShell, substituting the batch directory as needed.
+
+```powershell
+.\utils\extract-export-xml.ps1 -ExportsPath .\surveys\new
+```
+
+The extractor processes ZIPs in name order, requires exactly one XML member per archive, and writes each to `xml/<archive-stem>.xml`. After successful extraction, use the resulting folder (here `surveys/new/xml`) as the input path below.
+
 Run the bundled CLI, resolving the script relative to this skill:
 
 ```sh
@@ -40,5 +48,5 @@ If Betterleaks is not on PATH, use:
 bun <skill-directory>/scripts/redact-secrets.ts --betterleaks "<betterleaks-executable>" "<user-provided-path>"
 ```
 
-Access sensitive files only through this CLI. Do not read, search, preview, upload or otherwise inspect their contents, including for troubleshooting or verification. Report the CLI's summary. Do not claim that detection guarantees removal of all secrets.
+Access sensitive files only through the ZIP extractor and redaction CLI. Do not read, search, preview, upload or otherwise inspect their contents, including for troubleshooting or verification. Report the CLI's summary. Do not claim that detection guarantees removal of all secrets.
 
