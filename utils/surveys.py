@@ -135,9 +135,20 @@ def publish(source, target, incoming, existing, replace):
         staged.unlink(missing_ok=True)
 
 
+def batch_path(path):
+    path = path.absolute()
+    # Check before collapsing "..", which could hide a traversed link.
+    if path.is_symlink() or any(parent.is_symlink() for parent in path.parents):
+        raise ValueError(f"linked batch path: {path}")
+    normalized = Path(os.path.normpath(path))
+    if path.resolve(strict=True) != normalized:
+        raise ValueError(f"linked batch path: {path}")
+    return normalized
+
+
 def store(args):
-    source = args.input.absolute()
-    if source.is_symlink() or not (source.is_dir() or source.is_file()):
+    source = batch_path(args.input)
+    if not (source.is_dir() or source.is_file()):
         raise ValueError("supply an XML file or a directory of XML files")
     folder = source if source.is_dir() else source.parent
     if folder.resolve().is_relative_to(SURVEYS) and folder.resolve() != SURVEYS / "new/xml":
@@ -194,8 +205,8 @@ def file_batch(output, names, *, review=False, approval=None, replace_all=False,
 
 
 def resume(args):
-    output = args.output.absolute()
-    if output.name != "redact-secrets-output" or output.resolve() != output:
+    output = batch_path(args.output)
+    if output.name != "redact-secrets-output":
         raise ValueError("supply the completed redactor output directory")
     report = output / "redaction-report.json"
     if report.is_symlink():

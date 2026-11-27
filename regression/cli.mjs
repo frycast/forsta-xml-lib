@@ -27,6 +27,9 @@ function surveyPath(file) {
   const libraryFile = resolve(root, 'surveys', file);
   return existsSync(libraryFile) ? libraryFile : local;
 }
+function reportSummary(report) {
+  return `${values.json}: ${report.nodes.length} structures, ${report.blocks.length} blocks`;
+}
 function save(path, content) {
   mkdirSync(dirname(resolve(path)), { recursive: true });
   writeFileSync(path, content);
@@ -94,12 +97,12 @@ try {
     } else fail('Use corpus check or corpus lock');
   } else if (command === 'inspect' || command === 'extract') {
     const survey = loadSurveys([surveyPath(file)])[0];
-    if (command === 'extract') output(survey, values.json ? `Extracted ${survey.file}` : json(survey));
+    if (command === 'extract') output(survey, values.json ? reportSummary(survey) : json(survey));
     else {
       const selectors = ['entity','name','key'].filter(k => values[k]);
       if (selectors.length > 1) fail('Use one of --entity, --name or --key');
       const report = inspectSurvey(survey, selectors.length ? { [selectors[0]]: values[selectors[0]] } : null);
-      output({ ...report, command }, `${report.file}: ${report.nodes.length} structures, ${report.blocks.length} blocks\n${report.limitations.join('\n')}\nUnsupported: ${json(report.unsupported)}\n` + (selectors.length ? formatSources(report) : report.nodes.map(n => `${n.entity} ${n.tag} ${n.name}`).join('\n')));
+      output({ ...report, command }, values.json ? reportSummary(report) : `${report.file}: ${report.nodes.length} structures, ${report.blocks.length} blocks\n${report.limitations.join('\n')}\nUnsupported: ${json(report.unsupported)}\n` + (selectors.length ? formatSources(report) : report.nodes.map(n => `${n.entity} ${n.tag} ${n.name}`).join('\n')));
     }
   } else if (command === 'inventory') {
     const files = readdirSync(resolve(root, 'surveys'), { recursive: true }).filter(f => f.endsWith('.xml')).sort();

@@ -37,7 +37,7 @@ These commands use the existing offline regression runner. They require Node.js 
 | `corpus check` | Verify that the catalogue still matches its pinned XML sources. |
 | `corpus lock --revision <commit>` | Maintainers can update the pins after reviewing source changes. |
 
-Pass a path from the default `list` output directly to `inspect`, `extract` or `test`. An existing path in the current working directory takes precedence. When using `list --root`, resolve its output against that custom root. Fixture and report paths are relative to the working directory.
+Pass a path from the default `list` output directly to `inspect`, `extract` or `test`. An existing path in the current working directory takes precedence. When using `list --root`, resolve its output against that custom root. Fixture and report paths are relative to the working directory. With `inspect` or `extract`, use `--json file` to save the report and print just its path and structure/block counts. If an inspection selector matches several items, retry with `--key` and one of the XML keys from the error.
 
 ```sh
 python utils/surveys.py examples routing
