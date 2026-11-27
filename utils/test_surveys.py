@@ -39,6 +39,24 @@ class SurveyCLI(unittest.TestCase):
             self.assertTrue(inspected["file"].endswith(newest))
 
             source = "lina_shell/shell-0/3522RL-p624569876868.xml"
+            report_path = "survey report.json"
+            for command in ("inspect", "extract"):
+                summary = run(command, source, "--json", report_path)
+                report = json.loads((Path(tmp) / report_path).read_text(encoding="utf-8"))
+                self.assertEqual(summary, f"{report_path}: {len(report['nodes'])} structures, {len(report['blocks'])} blocks\n")
+
+            name = "Capture start time"
+            matches = [node for node in report["nodes"] if node["name"] == name]
+            self.assertEqual(len(matches), 2)
+            error = subprocess.run([*cli, "inspect", source, "--name", name, "--json", "-"],
+                                   cwd=tmp, capture_output=True, text=True)
+            self.assertEqual(error.returncode, 2)
+            message = json.loads(error.stdout)["error"]["message"]
+            for node in matches:
+                self.assertIn(f"entity {node['entity']}: {node['key']}", message)
+                retry = json.loads(run("inspect", source, "--key", node["key"], "--json", "-"))
+                self.assertEqual(retry["nodes"][0]["key"], node["key"])
+
             fixture = "followup cases.json"
             run("fixture", "routing/single-followup", "--json", fixture)
             result = json.loads(run("test", "--fixtures", fixture, source, "--json", "-"))
@@ -122,7 +140,7 @@ class SurveyCLI(unittest.TestCase):
             cleaned = output / original.name
             ET.ElementTree(export()).write(cleaned)
             target = library / "lina_shell/shell-0/3522RL-p123.xml"
-            args = SimpleNamespace(input=original, betterleaks=None)
+            args = SimpleNamespace(input=output / ".." / original.name, betterleaks=None)
             with patch.object(surveys, "SURVEYS", library), patch("shutil.which", return_value="bun"), patch("subprocess.run") as redact, contextlib.redirect_stdout(io.StringIO()):
                 redact.side_effect = subprocess.CalledProcessError(1, "redactor")
                 with self.assertRaises(subprocess.CalledProcessError):
@@ -137,6 +155,20 @@ class SurveyCLI(unittest.TestCase):
                 self.assertEqual(surveys.store(args), 3)
                 self.assertEqual(target.read_text(), "keep existing")
                 self.assertEqual(original.read_text(), "synthetic raw input")
+
+    def test_batch_paths_reject_links_before_normalizing_parents(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            folder = root / "folder"
+            folder.mkdir()
+            link = root / "alias"
+            try:
+                link.symlink_to(folder, target_is_directory=True)
+            except OSError as error:
+                self.skipTest(f"directory symlinks unavailable: {error}")
+            for path in (link, link / ".." / folder.name):
+                with self.subTest(path=path), self.assertRaisesRegex(ValueError, "linked"):
+                    surveys.batch_path(path)
 
     def test_review_then_resume_mixed_decisions(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -157,7 +189,7 @@ class SurveyCLI(unittest.TestCase):
             report = {"files_processed": 3, "files": [{"filename": n} for n in names]}
             (output / "redaction-report.json").write_text(json.dumps(report))
             paths = [t.relative_to(library).as_posix() for t in targets]
-            args = SimpleNamespace(output=output, review=None, keep_all=False, replace_all=False, replace=None)
+            args = SimpleNamespace(output=output / ".." / output.name, review=None, keep_all=False, replace_all=False, replace=None)
             def run():
                 with contextlib.redirect_stdout(io.StringIO()) as stdout:
                     status = surveys.resume(args)

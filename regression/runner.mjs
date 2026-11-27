@@ -39,7 +39,12 @@ export function select(items, selector, label = 'block') {
   checkedKeys(selector, ['key', 'entity', 'name', 'kind'], 'selector');
   assert.ok(['key', 'entity', 'name'].some(k => Object.hasOwn(selector, k)), 'selector requires key, entity or name');
   const matches = items.filter(item => Object.entries(selector).every(([k, v]) => item[k] === v));
-  assert.equal(matches.length, 1, `${label} selector ${JSON.stringify(selector)} matched ${matches.length}; use an exact key to disambiguate`);
+  if (matches.length !== 1) {
+    const message = `${label} selector ${JSON.stringify(selector)} matched ${matches.length}`;
+    if (!matches.length) assert.fail(message);
+    const candidates = matches.map(item => `  entity ${item.entity}: ${item.key}`);
+    assert.fail([message + '; retry with an exact key:', ...candidates].join('\n'));
+  }
   return matches[0];
 }
 
